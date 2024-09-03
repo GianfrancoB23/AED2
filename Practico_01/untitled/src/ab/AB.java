@@ -1,98 +1,190 @@
 package ab;
 
 public class AB {
+
     private Nodo raiz;
 
-    public AB(Nodo raiz){
+    public AB(Nodo raiz) {
         this.raiz = raiz;
     }
 
-    //Retorna la cantidad de nodos del AB.
-    public int cantNodos(){
+    //Pos: Retorna la cantidad de nodos del AB.
+    public int cantNodos() {
         return cantNodos(this.raiz);
-    };
+    }
 
-    private int cantNodos(Nodo nodo){
-        // 1. Caso base
-        if(nodo == null){
+    private int cantNodos(Nodo nodo) {
+        //1. Caso base
+        if (nodo == null) {
             return 0;
         }
-
-        // 2. Llamada rec (usar el metodo cantNodos en mis hijos)
+        //2. Llamadas rec (usar el metodo cantNodos en mis hijos)
         int cantNodosSubIzq = cantNodos(nodo.getIzq());
         int cantNodosSubDer = cantNodos(nodo.getDer());
 
-        // 3. Unir resultados
+        //3. Unir resultados
         return cantNodosSubIzq + cantNodosSubDer + 1;
     }
 
-    //Retorna la cantidad de nodos hoja del AB.
-    public int cantHojas(){
+    //Pos: Retorna la cantidad de nodos hoja del AB.
+    public int cantHojas() {
         return cantHojas(this.raiz);
-    };
-
-    private int cantHojas(Nodo nodo){
-        // 1. Caso base
-        if(nodo == null){
-            return 0;
-        }
-
-        if(nodo.getDer() == null && nodo.getIzq() == null){
-            return 1;
-        }
-
-        // 2. Llamada rec (usar el metodo cantNodos en mis hijos)
-        int cantHojasSubIzq = cantHojas(nodo.getIzq());
-        int cantHojasSubDer = cantHojas(nodo.getDer());
-
-
-        // 3. Unir resultados
-        return cantHojasSubIzq + cantHojasSubDer;
     }
 
-    //Retorna la altura del AB.
-    public int altura(){
-        return altura(this.raiz);
-    };
-
-    private int altura(Nodo nodo){
-        // 1. Caso base
-        if(nodo == null){
-            return -1;
-        }
-
-        if(nodo.getDer() == null && nodo.getIzq() == null){
+    private int cantHojas(Nodo nodo) {
+        //1. Caso base
+        if (nodo == null) {
             return 0;
         }
+        if (nodo.getDer() == null && nodo.getIzq() == null) {
+            return 1;
+        }
+        //2. Llamadas rec (usar el metodo cantNodos en mis hijos)
+        int cantHojasIzq = cantHojas(nodo.getIzq());
+        int cantHojasDer = cantHojas(nodo.getDer());
 
-        // 2. Llamada rec (usar el metodo cantNodos en mis hijos)
+        //3. Unir resultados
+        return cantHojasIzq + cantHojasDer;
+    }
+
+    //Pos: Retorna la altura del AB.
+    public int altura() {
+        return altura(this.raiz);
+    }
+
+    private int altura(Nodo nodo) {
+        //1. Caso base
+        if (nodo == null) {
+            return -1;
+        }
+        if (nodo.getDer() == null && nodo.getIzq() == null) {
+            return 0;
+        }
+        //2. Llamadas rec (usar el metodo cantNodos en mis hijos)
         int alturaIzq = altura(nodo.getIzq());
         int alturaDer = altura(nodo.getDer());
 
-        // 3. Unir resultados
-        return 1 + Math.max(alturaIzq,alturaDer);
+        //3. Unir resultados
+        return 1 + Math.max(alturaIzq, alturaDer);
     }
 
-    //Retorna true si y solo si todos los elementos del AB son pares.
-    public boolean todosPares(){
+    //Pos: Retorna true si y solo si todos los elementos del AB son pares.
+    public boolean todosPares() {
         return todosPares(this.raiz);
-    };
+    }
 
-    private boolean todosPares(Nodo nodo){
-        // 1. Caso base
-        if(nodo == null){
+    private boolean todosPares(Nodo nodo) {
+        //1. Caso base
+        if (nodo == null) {
+            return true;
+        }
+        if (nodo.getDato() % 2 != 0) {
             return false;
         }
 
-        // 2. Llamada rec (usar el metodo cantNodos en mis hijos)
+        //2. Llamadas rec (usar el metodo todosPares en mis hijos)
+        boolean respIzq = todosPares(nodo.getIzq());
+        boolean respDer = todosPares(nodo.getDer());
 
+        //3. Unir resultados
+        return respDer && respIzq;
+    }
 
-        // 3. Unir resultados
+    //Pos: Retorna true si y solo si todos los elementos del AB son pares.
+    public boolean todosParesV2() {
+        return todosParesV2(this.raiz);
+    }
+
+    private boolean todosParesV2(Nodo nodo) {
+        //1. Caso base
+        if (nodo == null) {
+            return true;
+        }
+        if (nodo.getDato() % 2 != 0) {
+            return false;
+        }
+
+        //2. Llamadas rec (usar el metodo todosPares en mis hijos)
+
+        //3. Unir resultados
+        return todosPares(nodo.getDer()) && todosPares(nodo.getIzq());
+    }
+
+    public boolean iguales(AB arbol) {
+        return iguales(arbol.raiz, this.raiz);
+    }
+
+    private boolean iguales(Nodo nodo1, Nodo nodo2) {
+        //1. Caso base
+        if (nodo1 == null && nodo2 == null) {
+            return true;
+        }
+        if (nodo1 == null || nodo2 == null) {
+            return false;
+        }
+        if(nodo1.getDato() != nodo2.getDato()){
+            return false;
+        }
+
+        //2. Llamadas rec (usar el metodo todosPares en mis hijos)
+        //3. Unir resultados
+        return iguales(nodo1.getDer(), nodo2.getDer()) && iguales(nodo1.getIzq(), nodo2.getIzq());
+    }
+
+    private boolean igualesCor(Nodo nodo1, Nodo nodo2) {
+        //1. Caso base
+        if (nodo1 == null && nodo2 == null) {
+            return true;
+        }
+        if (nodo1 == null || nodo2 == null) {
+            return false;
+        }
+        if(nodo1.getDato() != nodo2.getDato()){
+            return false;
+        }
+
+        //2. Llamadas rec (usar el metodo todosPares en mis hijos)
+        //3. Unir resultados
+        return igualesCor(nodo1.getDer(), nodo2.getDer()) && igualesCor(nodo1.getIzq(), nodo2.getIzq());
+    }
+
+    //Pos: Retorna true si y solo si el dato pasado como parámetro pertenece al AB.
+    boolean pertenece(int x) {
+        return pertenece(this.raiz, x);
+    }
+    private boolean pertenece(Nodo nodo, int x){
+        //1. Caso base
+        if(nodo == null){
+            return false;
+        }
+        if(nodo.getDato() != x){
+            return false;
+        }
+
+        //2. Llamadas rec (usar el metodo todosPares en mis hijos)
+        //3. Unir resultados
         return false;
     }
 
-//   boolean pertenece(int x);
-//    //Pos: Retorna true si y solo si el dato pasado como parámetro pertenece al AB
+    //Pos: Dado un árbol binario retorna true si y solo si el árbol es equilibrado.
+    public boolean equilibrado() {
 
-    //public boolean equilibrado();
+        return false;
+    }
+
+    public AB clon(){
+        Nodo nuevaRaiz = clon(this.raiz);
+        return new AB(nuevaRaiz);
+    }
+
+    private Nodo clon(Nodo nodo){
+        if(nodo == null){
+            return null;
+        }
+        Nodo clonado = new Nodo(nodo.getDato());
+        clonado.setDer(clon(nodo.getDer()));
+        clonado.setIzq(clon(nodo.getIzq()));
+        return clonado;
+    }
+
 }

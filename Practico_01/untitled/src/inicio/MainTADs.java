@@ -8,7 +8,7 @@ public class MainTADs {
         pila.push(3);
         pila.push(2);
         pila.push(1);
-        while(!pila.estaVacia()){
+        while (!pila.estaVacia()){
             System.out.println(pila.pop());
         }
     }

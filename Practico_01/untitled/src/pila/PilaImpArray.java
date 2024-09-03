@@ -5,7 +5,7 @@ public class PilaImpArray implements Pila{
     private int[] datos;
     private int indice;
 
-    public PilaImpArray(int cantMax){
+    public PilaImpArray(int cantMax) {
         datos = new int[cantMax];
         indice = -1;
     }
@@ -13,7 +13,7 @@ public class PilaImpArray implements Pila{
     @Override
     public void push(int dato) {
         //indice++;
-        datos[++indice] = dato; //Primero se incrementa el indice
+        datos[++indice] = dato;  //Primero se incrementa el indice
     }
 
     @Override
@@ -23,12 +23,13 @@ public class PilaImpArray implements Pila{
 
     @Override
     public int pop() {
-        return datos[indice--];//primero decrementa y luego muestra el dato
+
+        return datos[indice--];
     }
 
     @Override
     public boolean estaVacia() {
-        return indice == -1;
+        return indice == -1 ;
     }
 
     @Override

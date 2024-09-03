@@ -1,6 +1,7 @@
 package pila;
 
 public class Nodo {
+
     private int dato;
     private Nodo sig;
 

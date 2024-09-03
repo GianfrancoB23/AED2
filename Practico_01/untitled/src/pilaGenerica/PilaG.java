@@ -1,13 +1,14 @@
 package pilaGenerica;
 
 public interface PilaG<T> {
-    // pre: !estaLlena()
-     void push(T dato);
 
-    //pre: !estaVacia
+    //pre !estaLlena
+    void push(T dato);
+
+    //pre !estaVacia
     T top();
 
-    //pre: !estaVacia
+    //pre !estaVacia
     T pop();
 
     boolean estaVacia();

@@ -1,6 +1,7 @@
 package pilaGenerica;
 
-public class PilaGImp <T> implements PilaG<T>{
+public class PilaGImp<T> implements PilaG<T>{
+
 
     @Override
     public void push(T dato) {

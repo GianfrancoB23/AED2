@@ -1,11 +1,18 @@
 package pila;
 
 public interface Pila {
-    // pre: !estaLlena()
-    public void push(int dato);
-    public int top();
-    public int pop();
-    public boolean estaVacia();
-    public boolean estaLlena();
+
+    //pre !estaLlena
+    void push(int dato);
+
+    //pre !estaVacia
+    int top();
+
+    //pre !estaVacia
+    int pop();
+
+    boolean estaVacia();
+
+    boolean estaLlena();
 
 }

@@ -10,11 +10,9 @@ public class PilaImp implements Pila{
 
     @Override
     public void push(int dato) {
-        /*Nodo nuevo = new Nodo(dato);
+      /*  Nodo nuevo = new Nodo(dato);
         nuevo.setSig(inicio);
-        inicio = nuevo;*/
-
-        //Es lo mismo que arriba, pero resumido y eficiente
+        inicio = nuevo; */
         inicio = new Nodo(dato, inicio);
     }
 
@@ -39,4 +37,6 @@ public class PilaImp implements Pila{
     public boolean estaLlena() {
         return false;
     }
+
+
 }

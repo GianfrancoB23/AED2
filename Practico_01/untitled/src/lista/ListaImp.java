@@ -2,6 +2,7 @@ package lista;
 
 public class ListaImp<T> implements Lista<T>{
 
+    //implementar con un nodo
 
     @Override
     public void insertar(T dato) {
@@ -36,5 +37,15 @@ public class ListaImp<T> implements Lista<T>{
     @Override
     public T eliminar(int indice) {
         return null;
+    }
+
+    @Override
+    public T eliminar(T dato) {
+        return null;
+    }
+
+    @Override
+    public boolean esVacia() {
+        return false;
     }
 }
