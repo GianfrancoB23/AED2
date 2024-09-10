@@ -27,5 +27,8 @@ public class MainAB {
 
         boolean iguales = arbol.iguales(arbol2);
         System.out.println("iguales = " + iguales);
+
+        int ctdMayores = arbol.RetornoCtd(5);
+        System.out.println("mayores = " + ctdMayores);
     }
 }

@@ -187,4 +187,28 @@ public class AB {
         return clonado;
     }
 
+    // EJERCICIO 6
+//    A. Desarrolle un algoritmo que, recibiendo un valor entero k, retorne la cantidad de elementos que
+//    son mayores a k.
+    public int RetornoCtd(int k){
+        return RetornoCtd(k, this.raiz);
+    }
+    private int RetornoCtd(int k, Nodo nodo){
+        int cuentaActual = 0;
+        //1. Caso base
+        if(nodo == null){
+            return 0;
+        }
+        if(nodo.getDato() > k){
+            cuentaActual = 1;
+        }
+
+        //2. Llamadas rec (usar el metodo todosPares en mis hijos)
+        int cantidadMayoresDerecha = RetornoCtd(k, nodo.getDer());
+        int cantidadMayoresIzquierda = RetornoCtd(k, nodo.getIzq());
+
+        //3. Unir resultados
+
+        return cuentaActual+cantidadMayoresIzquierda + cantidadMayoresDerecha;
+    }
 }
