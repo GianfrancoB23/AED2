@@ -157,19 +157,33 @@ public class AB {
         if(nodo == null){
             return false;
         }
-        if(nodo.getDato() != x){
-            return false;
+        if(nodo.getDato() == x){
+            return true;
         }
 
         //2. Llamadas rec (usar el metodo todosPares en mis hijos)
         //3. Unir resultados
-        return false;
+        return pertenece(nodo.getIzq(),x) || pertenece(nodo.getDer(),x);
+
     }
 
     //Pos: Dado un árbol binario retorna true si y solo si el árbol es equilibrado.
     public boolean equilibrado() {
+        return equilibrado(this.raiz);
+    }
 
-        return false;
+    private boolean equilibrado(Nodo nodo) {
+        if(nodo == null){
+            return true;
+        }
+
+        int alturaIzq = altura(nodo.getIzq());
+        int alturaDer = altura(nodo.getDer());
+        if (Math.abs(alturaDer-alturaIzq) > 1){
+            return false;
+        }
+
+        return equilibrado(nodo.getIzq()) && equilibrado(nodo.getDer());
     }
 
     public AB clon(){
@@ -188,8 +202,8 @@ public class AB {
     }
 
     // EJERCICIO 6
-//    A. Desarrolle un algoritmo que, recibiendo un valor entero k, retorne la cantidad de elementos que
-//    son mayores a k.
+    //    A. Desarrolle un algoritmo que, recibiendo un valor entero k, retorne la cantidad de elementos que
+    //    son mayores a k.
     public int RetornoCtd(int k){
         return RetornoCtd(k, this.raiz);
     }
@@ -211,4 +225,8 @@ public class AB {
 
         return cuentaActual+cantidadMayoresIzquierda + cantidadMayoresDerecha;
     }
+
+    // B. Desarrolle un algoritmo que retorne una lista con sus elementos ordenados de forma
+    // ascendente.
+
 }
