@@ -1,6 +1,8 @@
 package sistema;
 
+import dominio.ABBJugadores;
 import dominio.Jugador;
+import dominio.ResultadoBusquedaJugador;
 import interfaz.*;
 
 public class ImplementacionSistema implements Sistema {
@@ -9,6 +11,7 @@ public class ImplementacionSistema implements Sistema {
     private boolean[][] conexiones;
     private int maxSucursales;
 
+    private ABBJugadores raizJugadores;
 
     @Override
     public Retorno inicializarSistema(int maxSucursales) {
@@ -30,20 +33,42 @@ public class ImplementacionSistema implements Sistema {
                 apellido == null || apellido.isEmpty() || categoria == null) {
             return Retorno.error1("Parametro vacio o null");
         }
-
         if (buscarJugador(alias) != null) {
             return Retorno.error2("Ya existe un jugador con ese alias");
         }
 
         Jugador nuevoJugador = new Jugador(alias, nombre, apellido, categoria);
+        raizJugadores.insertar(nuevoJugador);
 
         return Retorno.noImplementada();
     }
 
     @Override
     public Retorno buscarJugador(String alias) {
-        return Retorno.noImplementada();
+        if (alias == null || alias.isEmpty()) {
+            return Retorno.error1("El alias es nulo o vacio");
+        }
+        // Inicializar contador de nodos recorridos
+        int[] contador = {0};
+
+        // Busca el jugador en el árbol
+        ResultadoBusquedaJugador resultado = raizJugadores.buscar(alias);
+        Jugador jugadorEncontrado = resultado.getJugador();
+        int nodosRecorridos = resultado.getNodosRecorridos();
+
+        if (jugadorEncontrado == null) {
+            return Retorno.error2("No se encontro jugador con ese alias, se recorrieron " + nodosRecorridos + " nodos.");
+        }
+
+        // Formateo la informacion para mostrar
+        String valorString = jugadorEncontrado.getAlias() + ";" +
+                jugadorEncontrado.getNombre() + ";" +
+                jugadorEncontrado.getApellido() + ";" +
+                jugadorEncontrado.getCategoria().toString();
+
+        return Retorno.ok(nodosRecorridos, valorString);
     }
+
 
     @Override
     public Retorno listarJugadoresAscendente() {

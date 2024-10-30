@@ -4,7 +4,7 @@ import interfaz.Categoria;
 
 import java.util.Objects;
 
-public class Jugador {
+public class Jugador implements Comparable<Jugador>{
     private String alias;
     private String nombre;
     private String apellido;
@@ -81,7 +81,14 @@ public class Jugador {
     }
 
     @Override
+    public int compareTo(Jugador o) {
+        return this.alias.compareTo(o.getAlias());
+    }
+
+    //TODO Terminar el toString
+    @Override
     public String toString() {
         return super.toString();
     }
+
 }
