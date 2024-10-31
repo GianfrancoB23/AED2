@@ -1,5 +1,6 @@
 package dominio;
 
+// Se crea clase de ResultadoBusquedaJugador para pasar el nodo y la cantidad recorridos
 public class ResultadoBusquedaJugador {
     private Jugador jugador;
     private int nodosRecorridos;

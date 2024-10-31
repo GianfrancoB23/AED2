@@ -1,35 +1,71 @@
 package dominio;
 
+import interfaz.Categoria;
+
 public class ABBJugadores<T extends Comparable<T>> {
     private Jugador raiz;
+    private ABBJugadores<Jugador> ABBPrincipiante;
+    private ABBJugadores<Jugador> ABBEstandar;
+    private ABBJugadores<Jugador> ABBProfesional;
+    private Categoria categoria;
 
     public ABBJugadores() {
         this.raiz = null;
+        this.ABBPrincipiante = new ABBJugadores<>(Categoria.PRINCIPIANTE);
+        this.ABBEstandar = new ABBJugadores<>(Categoria.ESTANDARD);
+        this.ABBProfesional = new ABBJugadores<>(Categoria.PROFESIONAL);
+    }
+
+    // Constructor para los ABBCategorias
+    public ABBJugadores(Categoria categoria) {
+        this.raiz = null;
+        this.categoria = categoria;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
     }
 
     public void insertar(Jugador nuevoJugador) {
         if (this.raiz == null) {
-            this.raiz = new Jugador(nuevoJugador.getAlias(),nuevoJugador.getNombre(),nuevoJugador.getApellido(),nuevoJugador.getCategoria());
+            this.raiz = new Jugador(nuevoJugador.getAlias(), nuevoJugador.getNombre(), nuevoJugador.getApellido(), nuevoJugador.getCategoria());
         } else {
             insertarRec(this.raiz, nuevoJugador);
         }
+
+        // Insertar segun categoria
+        if (nuevoJugador.getCategoria() == Categoria.PRINCIPIANTE) {
+            ABBPrincipiante.insertarEnCategoria(nuevoJugador);
+        } else if (nuevoJugador.getCategoria() == Categoria.ESTANDARD) {
+            ABBEstandar.insertarEnCategoria(nuevoJugador);
+        } else if (nuevoJugador.getCategoria() == Categoria.PROFESIONAL) {
+            ABBProfesional.insertarEnCategoria(nuevoJugador);
+        }
     }
 
-    private void insertarRec(Jugador jugador, Jugador nuevoJugador) {
-        if (nuevoJugador.compareTo(jugador) > 0) {
-            // Derecha
-            if (jugador.getDer() == null) {
-                jugador.setDer(nuevoJugador);
+    // Inserto en arbol principal
+    private void insertarRec(Jugador nodo, Jugador nuevoJugador) {
+        if (nuevoJugador.getAlias().compareTo(nodo.getAlias()) > 0) {
+            if (nodo.getDer() == null) {
+                nodo.setDer(nuevoJugador);
             } else {
-                insertarRec(jugador.getDer(), nuevoJugador);
+                insertarRec(nodo.getDer(), nuevoJugador);
             }
         } else {
-            // Izquierda
-            if (jugador.getIzq() == null) {
-                jugador.setIzq(nuevoJugador);
+            if (nodo.getIzq() == null) {
+                nodo.setIzq(nuevoJugador);
             } else {
-                insertarRec(jugador.getIzq(), nuevoJugador);
+                insertarRec(nodo.getIzq(), nuevoJugador);
             }
+        }
+    }
+
+    // Inserto segun cat
+    private void insertarEnCategoria(Jugador nuevoJugador) {
+        if (this.raiz == null) {
+            this.raiz = nuevoJugador;
+        } else {
+            insertarRec(this.raiz, nuevoJugador);
         }
     }
 
@@ -45,13 +81,55 @@ public class ABBJugadores<T extends Comparable<T>> {
         nodosRecorridos++;
 
         if (nodo.getAlias().equals(alias)) {
-            return new ResultadoBusquedaJugador(nodo, nodosRecorridos); //Se crea objeto de ResultadoBusquedaJugador para pasar ambas cosas
+            return new ResultadoBusquedaJugador(nodo, nodosRecorridos); // Se crea clase de ResultadoBusquedaJugador para pasar el nodo y la cantidad recorridos
         }
 
         if (alias.compareTo(nodo.getAlias()) < 0) {
-            return buscarRec(nodo.getIzq(), alias, nodosRecorridos); //Buscar en subarbol izquierdo
+            return buscarRec(nodo.getIzq(), alias, nodosRecorridos); // Buscar en subarbol izquierdo
         } else {
-            return buscarRec(nodo.getDer(), alias, nodosRecorridos); //Buscar en subarbol derecho
+            return buscarRec(nodo.getDer(), alias, nodosRecorridos); // Buscar en subarbol derecho
         }
     }
+
+    public String inOrden() {
+        return inOrden(this.raiz);
+    }
+
+    //Como esta insertado ABB por alias, ya esta ordenado
+    private String inOrden(Jugador nodo) { // izq - nodo - der
+        String ret = "";
+        if (nodo != null) {
+            ret += inOrden(nodo.getIzq());
+            ret += nodo.getAlias() + ";" + nodo.getNombre() + ";" + nodo.getApellido() + ";" + nodo.getCategoria().toString() + "|";
+            ret += inOrden(nodo.getDer());
+        }
+        return ret;
+    }
+
+    public String buscarXCat(Categoria cat) {
+        if (cat == ABBEstandar.getCategoria()) {
+            return buscarXCatRec(ABBEstandar.raiz);
+        }
+        if (cat == ABBPrincipiante.getCategoria()) {
+            return buscarXCatRec(ABBPrincipiante.raiz);
+        }
+        if (cat == ABBProfesional.getCategoria()) {
+            return buscarXCatRec(ABBProfesional.raiz);
+        }
+        return "Esa categoria no existe.";
+    }
+
+    private String buscarXCatRec(Jugador nodo) {
+        String ret = "";
+        if (nodo != null) {
+
+            ret += buscarXCatRec(nodo.getIzq());
+            ret += nodo.getAlias() + ";" + nodo.getNombre() + ";" + nodo.getApellido() + ";" + nodo.getCategoria().toString() + "|";
+            ret += buscarXCatRec(nodo.getDer());
+
+        }
+        return ret;
+    }
+
+
 }

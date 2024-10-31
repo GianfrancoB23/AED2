@@ -48,10 +48,8 @@ public class ImplementacionSistema implements Sistema {
         if (alias == null || alias.isEmpty()) {
             return Retorno.error1("El alias es nulo o vacio");
         }
-        // Inicializar contador de nodos recorridos
-        int[] contador = {0};
 
-        // Busca el jugador en el árbol
+        // Busca el jugador en el arbol
         ResultadoBusquedaJugador resultado = raizJugadores.buscar(alias);
         Jugador jugadorEncontrado = resultado.getJugador();
         int nodosRecorridos = resultado.getNodosRecorridos();
@@ -72,12 +70,12 @@ public class ImplementacionSistema implements Sistema {
 
     @Override
     public Retorno listarJugadoresAscendente() {
-        return Retorno.noImplementada();
+        return Retorno.ok(raizJugadores.inOrden());
     }
 
     @Override
     public Retorno listarJugadoresPorCategoria(Categoria unaCategoria) {
-        return Retorno.noImplementada();
+        return Retorno.ok(raizJugadores.buscarXCat(unaCategoria));
     }
 
     @Override
