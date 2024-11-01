@@ -76,4 +76,19 @@ public class ABBEquipos <T extends Comparable<T>>{
         }
     }
 
+    public String inOrden() {
+        return inOrden(this.raiz);
+    }
+
+    //Como esta insertado ABB por nombre, ya esta ordenado
+    private String inOrden(Equipo nodo) { // der - nodo - izq
+        String ret = "";
+        if (nodo != null) {
+            ret += inOrden(nodo.getDer());
+            ret += nodo.getNombre() + ";" + nodo.getManager() + ";" + nodo.getCtdIntegrantes() + "|";
+            ret += inOrden(nodo.getIzq());
+        }
+        return ret;
+    }
+
 }

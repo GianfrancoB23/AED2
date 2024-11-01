@@ -120,7 +120,7 @@ public class ImplementacionSistema implements Sistema {
         if(abbJugadores.obtenerJugador(aliasJugador).getJugador().getEquipo() != null){
             return Retorno.error6("El jugador ya pertenece a otro equipo");
         }
-        
+
         // Seteo el equipo en el jugador
         jugador.setEquipo(abbEquipos.obtenerEquipo(nombreEquipo));
 
@@ -133,12 +133,22 @@ public class ImplementacionSistema implements Sistema {
 
     @Override
     public Retorno listarJugadoresDeEquipo(String nombreEquipo) {
-        return Retorno.noImplementada();
+        if(nombreEquipo == null || nombreEquipo.isEmpty()){
+            return Retorno.error1("El nombre del equipo esta vacio o es nulo.");
+        }
+        if(!abbEquipos.existe(nombreEquipo)){
+            return Retorno.error2("No existe un equipo con ese nombre");
+        }
+
+        String jugadores = abbEquipos.obtenerEquipo(nombreEquipo).jugadores.inOrden();
+
+        return Retorno.ok(jugadores);
     }
 
     @Override
     public Retorno listarEquiposDescendente() {
-        return Retorno.noImplementada();
+        String equipos = abbEquipos.inOrden();
+        return Retorno.ok(equipos);
     }
 
     @Override
