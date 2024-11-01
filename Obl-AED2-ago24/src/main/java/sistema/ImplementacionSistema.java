@@ -1,8 +1,10 @@
 package sistema;
 
-import dominio.ABBJugadores;
-import dominio.Jugador;
-import dominio.ResultadoBusquedaJugador;
+import dominio.ABBEquipos;
+import dominio.Equipo;
+import dominio.Jugadores.ABBJugadores;
+import dominio.Jugadores.Jugador;
+import dominio.Jugadores.ResultadoBusquedaJugador;
 import interfaz.*;
 
 public class ImplementacionSistema implements Sistema {
@@ -11,7 +13,8 @@ public class ImplementacionSistema implements Sistema {
     private boolean[][] conexiones;
     private int maxSucursales;
 
-    private ABBJugadores raizJugadores;
+    private ABBJugadores abbJugadores;
+    private ABBEquipos abbEquipos;
 
     @Override
     public Retorno inicializarSistema(int maxSucursales) {
@@ -23,6 +26,9 @@ public class ImplementacionSistema implements Sistema {
         this.conexiones = new boolean[maxSucursales][maxSucursales];
 
         this.maxSucursales = maxSucursales;
+
+        this.abbJugadores = new ABBJugadores();
+        this.abbEquipos = new ABBEquipos();
 
         return Retorno.ok();
     }
@@ -38,7 +44,7 @@ public class ImplementacionSistema implements Sistema {
         }
 
         Jugador nuevoJugador = new Jugador(alias, nombre, apellido, categoria);
-        raizJugadores.insertar(nuevoJugador);
+        abbJugadores.insertar(nuevoJugador);
 
         return Retorno.noImplementada();
     }
@@ -50,7 +56,7 @@ public class ImplementacionSistema implements Sistema {
         }
 
         // Busca el jugador en el arbol
-        ResultadoBusquedaJugador resultado = raizJugadores.buscar(alias);
+        ResultadoBusquedaJugador resultado = abbJugadores.obtenerJugador(alias);
         Jugador jugadorEncontrado = resultado.getJugador();
         int nodosRecorridos = resultado.getNodosRecorridos();
 
@@ -70,22 +76,59 @@ public class ImplementacionSistema implements Sistema {
 
     @Override
     public Retorno listarJugadoresAscendente() {
-        return Retorno.ok(raizJugadores.inOrden());
+        return Retorno.ok(abbJugadores.inOrden());
     }
 
     @Override
     public Retorno listarJugadoresPorCategoria(Categoria unaCategoria) {
-        return Retorno.ok(raizJugadores.buscarXCat(unaCategoria));
+        return Retorno.ok(abbJugadores.buscarXCat(unaCategoria));
     }
 
     @Override
     public Retorno registrarEquipo(String nombre, String manager) {
-        return Retorno.noImplementada();
+        if(nombre == null || manager == null || nombre.isEmpty() || manager.isEmpty()){
+            return Retorno.error1("Uno de los parametros es nulo o esta vacio.");
+        }
+        if(abbEquipos.existe(nombre)){
+            return Retorno.error2("El equipo ya se encuentra registrado.");
+        }
+        Equipo equipoNuevo = new Equipo(nombre, manager);
+        abbEquipos.insertar(equipoNuevo);
+
+        return Retorno.ok("Se ha ingresado el equipo " + equipoNuevo.getNombre());
     }
 
     @Override
     public Retorno agregarJugadorAEquipo(String nombreEquipo, String aliasJugador) {
-        return Retorno.noImplementada();
+        if(nombreEquipo == null || aliasJugador == null ||nombreEquipo.isEmpty() || aliasJugador.isEmpty()){
+            return Retorno.error1("Uno de los parametros esta vacio o es nulo.");
+        }
+        if(!abbEquipos.existe(nombreEquipo)){
+            return Retorno.error2("No existe equipo con ese nombre.");
+        }
+        if(!abbJugadores.existe(aliasJugador)){
+            return Retorno.error3("No existe jugador con ese alias.");
+        }
+        Equipo equipo = abbEquipos.obtenerEquipo(nombreEquipo);
+        if(equipo.getCtdIntegrantes()==5){
+            return Retorno.error4("El equipo ya tiene 5 integrantes.");
+        }
+        Jugador jugador = abbJugadores.obtenerJugador(aliasJugador).getJugador();
+        if(jugador.getCategoria().toString() != "Profesional"){
+            return Retorno.error5("El jugador no tiene categoria 'Profesional'");
+        }
+        if(abbJugadores.obtenerJugador(aliasJugador).getJugador().getEquipo() != null){
+            return Retorno.error6("El jugador ya pertenece a otro equipo");
+        }
+        
+        // Seteo el equipo en el jugador
+        jugador.setEquipo(abbEquipos.obtenerEquipo(nombreEquipo));
+
+        // Agrego el jugador al equipo
+        equipo.jugadores.insertar(abbJugadores.obtenerJugador(aliasJugador).getJugador());
+        equipo.sumarIntegrante();
+
+        return Retorno.ok("El jugador " + jugador.getAlias() + " ha sido agregado al equipo " + equipo.getNombre() + " correctamente.");
     }
 
     @Override

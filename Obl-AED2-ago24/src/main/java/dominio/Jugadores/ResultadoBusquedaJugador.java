@@ -1,4 +1,4 @@
-package dominio;
+package dominio.Jugadores;
 
 // Se crea clase de ResultadoBusquedaJugador para pasar el nodo y la cantidad recorridos
 public class ResultadoBusquedaJugador {

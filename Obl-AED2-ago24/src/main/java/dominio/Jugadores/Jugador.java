@@ -1,5 +1,6 @@
-package dominio;
+package dominio.Jugadores;
 
+import dominio.Equipo;
 import interfaz.Categoria;
 
 import java.util.Objects;
@@ -9,6 +10,7 @@ public class Jugador implements Comparable<Jugador>{
     private String nombre;
     private String apellido;
     private Categoria categoria;
+    private Equipo equipo;
     private Jugador izq;
     private Jugador der;
 
@@ -17,6 +19,7 @@ public class Jugador implements Comparable<Jugador>{
         this.nombre = nombre;
         this.apellido = apellido;
         this.categoria = categoria;
+        this.equipo = null;
     }
 
     public String getAlias() {
@@ -65,6 +68,14 @@ public class Jugador implements Comparable<Jugador>{
 
     public void setDer(Jugador der) {
         this.der = der;
+    }
+
+    public Equipo getEquipo() {
+        return equipo;
+    }
+
+    public void setEquipo(Equipo equipo) {
+        this.equipo = equipo;
     }
 
     @Override

@@ -1,29 +1,50 @@
 package dominio;
 
+import dominio.Jugadores.ABBJugadores;
+
+import java.util.Objects;
+
 public class Equipo implements Comparable<Equipo> {
     private String nombre;
     private String manager;
+    private int ctdIntegrantes;
+    public ABBJugadores jugadores;
     //private List<Jugador> jugadores;
 
     private Equipo izq;
     private Equipo der;
 
+    public Equipo(String nombre, String manager) {
+        this.nombre = nombre;
+        this.manager = manager;
+        this.ctdIntegrantes = 0;
+        this.jugadores = new ABBJugadores<>();
+        this.izq = null;
+        this.der = null;
+    }
+
     public String getNombre() {return nombre;}
     public String getManager() {return manager;}
     public Equipo getIzq() {return izq;}
     public Equipo getDer() {return der;}
+    public int getCtdIntegrantes(){return ctdIntegrantes;}
 
     public void setNombre(String name) {this.nombre = name;}
     public void setManager(String name) {this.manager = name;}
     public void setIzq(Equipo equipo) {this.izq = equipo;}
     public void setDer(Equipo equipo) {this.der = equipo;}
 
+    public void sumarIntegrante(){this.ctdIntegrantes++;}
+    public void restarIntegrante(){this.ctdIntegrantes--;}
+
     @Override
-    public boolean equals(Object eq) {
-        if (this == eq) return true;
-        if (eq == null || getClass() != o.getClass()) return false;
-        Equipo aux = (Equipo) eq;
-        return Objects.equals(nombre, aux.nombre) && Objects.equals(manager, aux.manager);
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nombre, manager, izq, der);
     }
 
     @Override

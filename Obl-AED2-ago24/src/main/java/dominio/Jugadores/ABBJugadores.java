@@ -1,5 +1,6 @@
-package dominio;
+package dominio.Jugadores;
 
+import dominio.Equipo;
 import interfaz.Categoria;
 
 public class ABBJugadores<T extends Comparable<T>> {
@@ -28,7 +29,7 @@ public class ABBJugadores<T extends Comparable<T>> {
 
     public void insertar(Jugador nuevoJugador) {
         if (this.raiz == null) {
-            this.raiz = new Jugador(nuevoJugador.getAlias(), nuevoJugador.getNombre(), nuevoJugador.getApellido(), nuevoJugador.getCategoria());
+            this.raiz = nuevoJugador;
         } else {
             insertarRec(this.raiz, nuevoJugador);
         }
@@ -69,11 +70,11 @@ public class ABBJugadores<T extends Comparable<T>> {
         }
     }
 
-    public ResultadoBusquedaJugador buscar(String alias) {
-        return buscarRec(this.raiz, alias, 0);
+    public ResultadoBusquedaJugador obtenerJugador(String alias) {
+        return obtenerJugadorRec(this.raiz, alias, 0);
     }
 
-    private ResultadoBusquedaJugador buscarRec(Jugador nodo, String alias, int nodosRecorridos) {
+    private ResultadoBusquedaJugador obtenerJugadorRec(Jugador nodo, String alias, int nodosRecorridos) {
         if (nodo == null) {
             return new ResultadoBusquedaJugador(null, nodosRecorridos);
         }
@@ -85,9 +86,29 @@ public class ABBJugadores<T extends Comparable<T>> {
         }
 
         if (alias.compareTo(nodo.getAlias()) < 0) {
-            return buscarRec(nodo.getIzq(), alias, nodosRecorridos); // Buscar en subarbol izquierdo
+            return obtenerJugadorRec(nodo.getIzq(), alias, nodosRecorridos); // Buscar en subarbol izquierdo
         } else {
-            return buscarRec(nodo.getDer(), alias, nodosRecorridos); // Buscar en subarbol derecho
+            return obtenerJugadorRec(nodo.getDer(), alias, nodosRecorridos); // Buscar en subarbol derecho
+        }
+    }
+
+    public boolean existe(String nombre) {
+        return existeRec(this.raiz, nombre);
+    }
+
+    private boolean existeRec(Jugador nodo, String nombre) {
+        if (nodo == null) {
+            return false;
+        }
+
+        if (nodo.getNombre().equals(nombre)) {
+            return true;
+        }
+
+        if (nombre.compareTo(nodo.getNombre()) < 0) {
+            return existeRec(nodo.getIzq(), nombre); // Existe en subarbol izquierdo
+        } else {
+            return existeRec(nodo.getDer(), nombre); // Existe en subarbol derecho
         }
     }
 
