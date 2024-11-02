@@ -1,10 +1,13 @@
 package sistema;
 
 import dominio.ABBEquipos;
+import dominio.ABBgenerico;
+import dominio.Conexion;
 import dominio.Equipo;
 import dominio.Jugadores.ABBJugadores;
 import dominio.Jugadores.Jugador;
 import dominio.Jugadores.ResultadoBusquedaJugador;
+import dominio.Sucursales.Sucursal;
 import interfaz.*;
 
 public class ImplementacionSistema implements Sistema {
@@ -13,6 +16,8 @@ public class ImplementacionSistema implements Sistema {
     private boolean[][] conexiones;
     private int maxSucursales;
 
+    private ABBgenerico<Sucursal> abbSucursales;
+    //private ABBgenerico<Conexion> abbConexiones;
     private ABBJugadores abbJugadores;
     private ABBEquipos abbEquipos;
 
@@ -29,6 +34,7 @@ public class ImplementacionSistema implements Sistema {
 
         this.abbJugadores = new ABBJugadores();
         this.abbEquipos = new ABBEquipos();
+        this.abbSucursales = new ABBgenerico<>();
 
         return Retorno.ok();
     }
@@ -153,11 +159,32 @@ public class ImplementacionSistema implements Sistema {
 
     @Override
     public Retorno registrarSucursal(String codigo, String nombre) {
+        if (abbSucursales.size() >= maxSucursales) {
+            return Retorno.error1("Máximo de sucursales alcanzadas");
+        }
+        if (codigo == null || codigo.isEmpty() || nombre == null || nombre.isEmpty()) {
+            return Retorno.error2("Debe especificar código y nombre");
+        }
+        Sucursal nuevaSucursal = new Sucursal(codigo, nombre);
+        if (abbSucursales.buscar(nuevaSucursal) != null) {
+            return Retorno.error3("Ya existe una sucursal de mismas caracteristicas.");
+        }
+        abbSucursales.insertar(nuevaSucursal);
+        return Retorno.ok();
         return Retorno.noImplementada();
     }
 
     @Override
     public Retorno registrarConexion(String codigoSucursal1, String codigoSucursal2, int latencia) {
+        if (latencia < 0) {
+            return Retorno.error1("Latencia no puede ser menor a 0");
+        }
+
+        Sucursal sucursal1 = abbSucursales.buscar(new Sucursal(codigoSucursal1, ""));
+        Sucursal sucursal2 = abbSucursales.buscar(new Sucursal(codigoSucursal2, ""));
+        if (sucursal1 == null || sucursal2 == null) {
+            return Retorno.error3("No existe sucursal registrada para uno de los códigos ingresados"); // sucursal no existe
+        }
         return Retorno.noImplementada();
     }
 
