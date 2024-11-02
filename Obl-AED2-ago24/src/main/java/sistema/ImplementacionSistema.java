@@ -180,8 +180,8 @@ public class ImplementacionSistema implements Sistema {
             return Retorno.error1("Latencia no puede ser menor a 0");
         }
 
-        Sucursal sucursal1 = abbSucursales.buscar(new Sucursal(codigoSucursal1, ""));
-        Sucursal sucursal2 = abbSucursales.buscar(new Sucursal(codigoSucursal2, ""));
+        //Sucursal sucursal1 = abbSucursales.buscar();
+        //Sucursal sucursal2 = abbSucursales.buscar();
         if (sucursal1 == null || sucursal2 == null) {
             return Retorno.error3("No existe sucursal registrada para uno de los códigos ingresados"); // sucursal no existe
         }
