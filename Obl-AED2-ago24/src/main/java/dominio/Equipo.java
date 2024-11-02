@@ -9,6 +9,7 @@ public class Equipo implements Comparable<Equipo> {
     private String manager;
     private int ctdIntegrantes;
     public ABBJugadores jugadores;
+    //private List<Jugador> jugadores;
 
     private Equipo izq;
     private Equipo der;
