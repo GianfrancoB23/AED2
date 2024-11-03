@@ -16,8 +16,16 @@ public class Conexion implements Comparable<Conexion> {
         return codigoDestino;
     }
 
+    public void setCodigoDestino(String codigoDestino) {
+        this.codigoDestino = codigoDestino;
+    }
+
     public int getLatencia() {
         return latencia;
+    }
+
+    public void setLatencia(int latencia) {
+        this.latencia = latencia;
     }
 
     @Override

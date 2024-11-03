@@ -159,7 +159,8 @@ public class ImplementacionSistema implements Sistema {
 
     @Override
     public Retorno registrarSucursal(String codigo, String nombre) {
-        if (abbSucursales.size() >= maxSucursales) {
+
+        if (abbSucursales.contarNodos() >= maxSucursales) {
             return Retorno.error1("Máximo de sucursales alcanzadas");
         }
         if (codigo == null || codigo.isEmpty() || nombre == null || nombre.isEmpty()) {
@@ -171,7 +172,6 @@ public class ImplementacionSistema implements Sistema {
         }
         abbSucursales.insertar(nuevaSucursal);
         return Retorno.ok();
-        return Retorno.noImplementada();
     }
 
     @Override
@@ -180,17 +180,44 @@ public class ImplementacionSistema implements Sistema {
             return Retorno.error1("Latencia no puede ser menor a 0");
         }
 
-        //Sucursal sucursal1 = abbSucursales.buscar();
-        //Sucursal sucursal2 = abbSucursales.buscar();
+        Sucursal sucursal1 = abbSucursales.buscar(new Sucursal(codigoSucursal1, ""));
+        Sucursal sucursal2 = abbSucursales.buscar(new Sucursal(codigoSucursal2, ""));
         if (sucursal1 == null || sucursal2 == null) {
             return Retorno.error3("No existe sucursal registrada para uno de los códigos ingresados"); // sucursal no existe
         }
-        return Retorno.noImplementada();
+
+        Conexion conexion1 = new Conexion(codigoSucursal2, latencia);
+        Conexion conexion2 = new Conexion(codigoSucursal1, latencia);
+
+        if (sucursal1.getConexiones().buscar(conexion1) != null) {
+            return Retorno.error4("Conexion ya existente entre ambos puntos"); // conexión ya existe
+        }
+
+        sucursal1.getConexiones().insertar(conexion1);
+        sucursal2.getConexiones().insertar(conexion2);
+
+        return Retorno.ok();
     }
 
     @Override
     public Retorno actualizarConexion(String codigoSucursal1, String codigoSucursal2, int latencia) {
-        return Retorno.noImplementada();
+        if (latencia < 0) {
+            return Retorno.error1("Latencia no puede ser menor a 0");
+        }
+        Sucursal sucursal1 = abbSucursales.buscar(new Sucursal(codigoSucursal1, ""));
+        Sucursal sucursal2 = abbSucursales.buscar(new Sucursal(codigoSucursal2, ""));
+        if (sucursal1 == null || sucursal2 == null) {
+            return Retorno.error3("Una de las sucursales ingreasadas no existe");
+        }
+
+        Conexion conexion1 = sucursal1.getConexiones().buscar(new Conexion(codigoSucursal2, 0));
+        Conexion conexion2 = sucursal2.getConexiones().buscar(new Conexion(codigoSucursal1, 0));
+        if (conexion1 == null || conexion2 == null) {
+            return Retorno.error4("No existe una conexion entre las dos sucursales"); // conexión no existe
+        }
+        conexion1.setLatencia(latencia);
+        conexion2.setLatencia(latencia);
+        return Retorno.ok();
     }
 
     @Override

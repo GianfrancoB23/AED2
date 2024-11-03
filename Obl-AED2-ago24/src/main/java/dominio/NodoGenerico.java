@@ -1,19 +1,19 @@
 package dominio;
 
 public class NodoGenerico<T extends Comparable<T>> {
-    private T dato;
+    private T nodo;
     private NodoGenerico<T> izquierdo;
     private NodoGenerico<T> derecho;
 
-    public NodoGenerico(T dato) {
-        this.dato = dato;
+    public NodoGenerico(T nodo) {
+        this.nodo = nodo;
         this.izquierdo = null;
         this.derecho = null;
     }
 
     // Getters y setters necesarios
-    public T getDato() {
-        return dato;
+    public T getNodo() {
+        return nodo;
     }
 
     public NodoGenerico<T> getIzquierdo() {
