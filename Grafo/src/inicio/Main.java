@@ -27,7 +27,8 @@ public class Main {
 		g.agregarArista("C", "D", 1);
 		g.agregarArista("G", "D", 1);
 
-		g.bfsV2("A");
+		g.dfs("D");
+		//g.bfsV2("A");
 
 
 

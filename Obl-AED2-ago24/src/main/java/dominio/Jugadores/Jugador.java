@@ -1,6 +1,6 @@
 package dominio.Jugadores;
 
-import dominio.Equipo;
+import dominio.Equipos.Equipo;
 import interfaz.Categoria;
 
 import java.util.Objects;

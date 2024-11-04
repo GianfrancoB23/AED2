@@ -1,6 +1,5 @@
 package dominio.Jugadores;
 
-import dominio.Equipo;
 import interfaz.Categoria;
 
 public class ABBJugadores<T extends Comparable<T>> {

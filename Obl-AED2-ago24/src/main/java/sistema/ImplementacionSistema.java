@@ -1,9 +1,10 @@
 package sistema;
 
-import dominio.ABBEquipos;
+import dominio.Equipos.ABBEquipos;
 import dominio.ABBgenerico;
-import dominio.Conexion;
-import dominio.Equipo;
+import dominio.Grafo.GrafoSucursales;
+import dominio.Sucursales.Conexion;
+import dominio.Equipos.Equipo;
 import dominio.Jugadores.ABBJugadores;
 import dominio.Jugadores.Jugador;
 import dominio.Jugadores.ResultadoBusquedaJugador;
@@ -12,14 +13,11 @@ import interfaz.*;
 
 public class ImplementacionSistema implements Sistema {
 
-    private String[] sucursales;
-    private boolean[][] conexiones;
     private int maxSucursales;
 
-    private ABBgenerico<Sucursal> abbSucursales;
-    //private ABBgenerico<Conexion> abbConexiones;
     private ABBJugadores abbJugadores;
     private ABBEquipos abbEquipos;
+    private GrafoSucursales sucursales;
 
     @Override
     public Retorno inicializarSistema(int maxSucursales) {
@@ -27,14 +25,11 @@ public class ImplementacionSistema implements Sistema {
             return Retorno.error1("La cantidad de sucursales maxima es igual o menor a 3");
         }
 
-        this.sucursales = new String[maxSucursales];
-        this.conexiones = new boolean[maxSucursales][maxSucursales];
-
         this.maxSucursales = maxSucursales;
 
         this.abbJugadores = new ABBJugadores();
         this.abbEquipos = new ABBEquipos();
-        this.abbSucursales = new ABBgenerico<>();
+        this.sucursales = new GrafoSucursales(maxSucursales);
 
         return Retorno.ok();
     }
@@ -160,18 +155,18 @@ public class ImplementacionSistema implements Sistema {
     @Override
     public Retorno registrarSucursal(String codigo, String nombre) {
 
-        if (abbSucursales.contarNodos() >= maxSucursales) {
+        if (sucursales.esLleno()) {
             return Retorno.error1("Máximo de sucursales alcanzadas");
         }
         if (codigo == null || codigo.isEmpty() || nombre == null || nombre.isEmpty()) {
             return Retorno.error2("Debe especificar código y nombre");
         }
-        Sucursal nuevaSucursal = new Sucursal(codigo, nombre);
-        if (abbSucursales.buscar(nuevaSucursal) != null) {
+        if (sucursales.existeSucursal(codigo)) {
             return Retorno.error3("Ya existe una sucursal de mismas caracteristicas.");
         }
-        abbSucursales.insertar(nuevaSucursal);
-        return Retorno.ok();
+        Sucursal sucursalNueva = new Sucursal(codigo, nombre);
+        sucursales.agregarSucursal(sucursalNueva);
+        return Retorno.ok("Se ha regitrado exitosamente.");
     }
 
     @Override
@@ -180,23 +175,17 @@ public class ImplementacionSistema implements Sistema {
             return Retorno.error1("Latencia no puede ser menor a 0");
         }
 
-        Sucursal sucursal1 = abbSucursales.buscar(new Sucursal(codigoSucursal1, ""));
-        Sucursal sucursal2 = abbSucursales.buscar(new Sucursal(codigoSucursal2, ""));
-        if (sucursal1 == null || sucursal2 == null) {
+        if (!sucursales.existeSucursal(codigoSucursal1) || !sucursales.existeSucursal(codigoSucursal2)) {
             return Retorno.error3("No existe sucursal registrada para uno de los códigos ingresados"); // sucursal no existe
         }
 
-        Conexion conexion1 = new Conexion(codigoSucursal2, latencia);
-        Conexion conexion2 = new Conexion(codigoSucursal1, latencia);
-
-        if (sucursal1.getConexiones().buscar(conexion1) != null) {
-            return Retorno.error4("Conexion ya existente entre ambos puntos"); // conexión ya existe
+        if (sucursales.existeConexion(codigoSucursal1,codigoSucursal2)) {
+            return Retorno.error4("Conexion ya existente entre ambas sucursales");
         }
 
-        sucursal1.getConexiones().insertar(conexion1);
-        sucursal2.getConexiones().insertar(conexion2);
+        sucursales.agregarConexion(codigoSucursal1,codigoSucursal2,latencia);
 
-        return Retorno.ok();
+        return Retorno.ok("Conexion registrada correctamente.");
     }
 
     @Override
@@ -204,26 +193,44 @@ public class ImplementacionSistema implements Sistema {
         if (latencia < 0) {
             return Retorno.error1("Latencia no puede ser menor a 0");
         }
-        Sucursal sucursal1 = abbSucursales.buscar(new Sucursal(codigoSucursal1, ""));
-        Sucursal sucursal2 = abbSucursales.buscar(new Sucursal(codigoSucursal2, ""));
-        if (sucursal1 == null || sucursal2 == null) {
-            return Retorno.error3("Una de las sucursales ingreasadas no existe");
+
+        if (!sucursales.existeSucursal(codigoSucursal1) || !sucursales.existeSucursal(codigoSucursal2)) {
+            return Retorno.error3("No existe sucursal registrada para uno de los códigos ingresados"); // sucursal no existe
         }
 
-        Conexion conexion1 = sucursal1.getConexiones().buscar(new Conexion(codigoSucursal2, 0));
-        Conexion conexion2 = sucursal2.getConexiones().buscar(new Conexion(codigoSucursal1, 0));
-        if (conexion1 == null || conexion2 == null) {
-            return Retorno.error4("No existe una conexion entre las dos sucursales"); // conexión no existe
+        if (!sucursales.existeConexion(codigoSucursal1,codigoSucursal2)) {
+            return Retorno.error4("No existe conexion entre ambas sucursales");
         }
-        conexion1.setLatencia(latencia);
-        conexion2.setLatencia(latencia);
-        return Retorno.ok();
+
+        sucursales.actualizarConexion(codigoSucursal1,codigoSucursal2,latencia);
+
+        return Retorno.ok("Conexion actualizada correctamente");
     }
 
     @Override
     public Retorno analizarSucursal(String codigoSucursal) {
-        return Retorno.noImplementada();
+        if (!sucursales.existeSucursal(codigoSucursal)) {
+            return Retorno.error1("La sucursal no existe.");
+        }
+
+        // DFS para contar sucursales INICIO
+        int ctdSucursalesInicio = sucursales.dfsContarNodos();
+
+        // Eliminar temporalmente la sucursal y sus conexiones
+        Sucursal sucursalEliminada = sucursales.obtenerSucursal(codigoSucursal);
+        sucursales.borrarSucursal(codigoSucursal);
+
+        // DFS para contar sucursales
+        int ctdSucursalesFinal = sucursales.dfsContarNodos();
+
+        // Inserto nuevamente la sucursal y sus conexiones
+        sucursales.agregarSucursal(sucursalEliminada);
+
+        String resultado = (ctdSucursalesFinal > ctdSucursalesInicio) ? "SI" : "NO";
+
+        return Retorno.ok(resultado);
     }
+
 
     @Override
     public Retorno sucursalesParaTorneo(String codigoSucursalAnfitriona, int latenciaLimite) {

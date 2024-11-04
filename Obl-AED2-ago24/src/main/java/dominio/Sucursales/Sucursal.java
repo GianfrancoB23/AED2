@@ -1,23 +1,16 @@
 package dominio.Sucursales;
 
 import dominio.ABBgenerico;
-import dominio.Conexion;
-import dominio.Equipo;
-import dominio.Jugadores.Jugador;
-import interfaz.Categoria;
 
 public class Sucursal implements Comparable<Sucursal> {
     private String codigo;
     private String nombre;
-    private Sucursal izq;
-    private Sucursal der;
-    private ABBgenerico<Conexion> conexiones;
+    private int pos;
 
 
     public Sucursal(String codigo, String nombre) {
         this.codigo = codigo;
         this.nombre = nombre;
-        this.conexiones = new ABBgenerico<>();
     }
 
     public String getCodigo() {
@@ -36,26 +29,13 @@ public class Sucursal implements Comparable<Sucursal> {
         this.nombre = nombre;
     }
 
-    public Sucursal getIzq() {
-        return izq;
+    public int getPos() {
+        return pos;
     }
 
-    public void setIzq(Sucursal izq) {
-        this.izq = izq;
+    public void setPos(int pos) {
+        this.pos = pos;
     }
-
-    public Sucursal getDer() {
-        return der;
-    }
-
-    public void setDer(Sucursal der) {
-        this.der = der;
-    }
-
-    public ABBgenerico<Conexion> getConexiones() {
-        return conexiones;
-    }
-
 
     @Override
     public int compareTo(Sucursal otraSucursal) {

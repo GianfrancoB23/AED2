@@ -1,8 +1,4 @@
-package dominio;
-
-import dominio.Jugadores.Jugador;
-import dominio.Jugadores.ResultadoBusquedaJugador;
-import interfaz.Categoria;
+package dominio.Equipos;
 
 public class ABBEquipos <T extends Comparable<T>>{
     private Equipo raiz;

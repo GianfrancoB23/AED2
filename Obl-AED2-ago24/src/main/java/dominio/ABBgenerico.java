@@ -60,4 +60,22 @@ public class ABBgenerico<T extends Comparable<T>> {
             return buscarRecursivo(nodo.getDerecho(), dato); // Buscar en subárbol derecho
         }
     }
+
+
+//    public void dfsContarNodos(String vert){
+//        System.out.println("Inicio DFS en " + vert);
+//        int pos = obtenerPos(vert);
+//        boolean[] visitados = new boolean[tope]; // Todo en false
+//        dfsRec(pos, visitados);
+//    }
+//
+//    private void dfsRec(int pos, boolean[] visitados){
+//        System.out.println( vertices[pos] );
+//        visitados[pos] = true;
+//        for (int j = 0; j < tope; j++) {
+//            if(matAdy[pos][j].isExiste() && !visitados[j]){
+//                dfsRec(j, visitados);
+//            }
+//        }
+//    }
 }
