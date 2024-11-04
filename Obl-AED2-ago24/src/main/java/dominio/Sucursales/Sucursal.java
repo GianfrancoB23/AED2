@@ -1,7 +1,5 @@
 package dominio.Sucursales;
 
-import dominio.ABBgenerico;
-
 public class Sucursal implements Comparable<Sucursal> {
     private String codigo;
     private String nombre;
