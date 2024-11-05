@@ -91,23 +91,23 @@ public class ABBJugadores<T extends Comparable<T>> {
         }
     }
 
-    public boolean existe(String nombre) {
-        return existeRec(this.raiz, nombre);
+    public boolean existe(String alias) {
+        return existeRec(this.raiz, alias);
     }
 
-    private boolean existeRec(Jugador nodo, String nombre) {
+    private boolean existeRec(Jugador nodo, String alias) {
         if (nodo == null) {
             return false;
         }
 
-        if (nodo.getNombre().equals(nombre)) {
+        if (nodo.getAlias().equals(alias)) {
             return true;
         }
 
-        if (nombre.compareTo(nodo.getNombre()) < 0) {
-            return existeRec(nodo.getIzq(), nombre); // Existe en subarbol izquierdo
+        if (alias.compareTo(nodo.getAlias()) < 0) {
+            return existeRec(nodo.getIzq(), alias); // Existe en subarbol izquierdo
         } else {
-            return existeRec(nodo.getDer(), nombre); // Existe en subarbol derecho
+            return existeRec(nodo.getDer(), alias); // Existe en subarbol derecho
         }
     }
 

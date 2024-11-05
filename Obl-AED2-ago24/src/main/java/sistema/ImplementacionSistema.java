@@ -41,14 +41,14 @@ public class ImplementacionSistema implements Sistema {
                 apellido == null || apellido.isEmpty() || categoria == null) {
             return Retorno.error1("Parametro vacio o null");
         }
-        if (buscarJugador(alias) != null) {
+        if (abbJugadores.existe(alias)) {
             return Retorno.error2("Ya existe un jugador con ese alias");
         }
 
         Jugador nuevoJugador = new Jugador(alias, nombre, apellido, categoria);
         abbJugadores.insertar(nuevoJugador);
 
-        return Retorno.noImplementada();
+        return Retorno.ok();
     }
 
     @Override
