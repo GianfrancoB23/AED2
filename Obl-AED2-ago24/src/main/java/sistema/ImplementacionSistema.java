@@ -116,7 +116,7 @@ public class ImplementacionSistema implements Sistema {
             return Retorno.error4("El equipo ya tiene 5 integrantes.");
         }
         Jugador jugador = abbJugadores.obtenerJugador(aliasJugador).getJugador();
-        if(jugador.getCategoria().toString() != "Profesional"){
+        if(jugador.getCategoria().toString() != "PROFESIONAL"){
             return Retorno.error5("El jugador no tiene categoria 'Profesional'");
         }
         if(abbJugadores.obtenerJugador(aliasJugador).getJugador().getEquipo() != null){
