@@ -235,9 +235,15 @@ public class ImplementacionSistema implements Sistema {
             return Retorno.error2("La sucursal no existe.");
         }
         if (latenciaLimite <= 0) {
-            return Retorno.error1("Latencia debe ser mayor a 0");
+            return Retorno.error3("Latencia debe ser mayor a 0");
         }
 
-        return Retorno.noImplementada();
+        String resultado = sucursales.dijkstra(codigoSucursalAnfitriona, latenciaLimite);
+
+        if (resultado.isEmpty()) {
+            return Retorno.error4("No se encontraron sucursales dentro del límite de latencia.");
+        }
+
+        return Retorno.ok(resultado);
     }
 }

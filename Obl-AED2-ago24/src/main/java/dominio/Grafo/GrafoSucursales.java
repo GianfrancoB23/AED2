@@ -176,4 +176,61 @@ public class GrafoSucursales {
             }
         }
     }
+
+    public String dijkstra(String vOrigen, int latenciaLimite) {
+        int posOrigen = obtenerPos(vOrigen);
+        ListaImp<Sucursal> listaSucursalesConLatenciaValida = new ListaImp<>();
+
+        // Inicializar estructuras
+        boolean[] visitados = new boolean[tope];
+        int[] costos = new int[tope];
+
+        for (int i = 0; i < tope; i++) {
+            costos[i] = Integer.MAX_VALUE;
+        }
+        costos[posOrigen] = 0;
+
+        for (int v = 0; v < tope - 1; v++) {
+            //1) Obtener el vertice no visitado de menor costo (si hay varios cualquiera)
+            int pos = obtenerVerticeNoVisitadoDeMenorCosto(visitados, costos);
+            if (pos != -1) {
+                // Visitarlo
+                visitados[pos] = true;
+
+                // Actualizar los costos de los adyacentes no visitados
+                for (int j = 0; j < tope; j++) {
+                    if (matAdy[pos][j].isExiste() && !visitados[j]) {
+                        int costoNuevo = costos[pos] + matAdy[pos][j].getLatencia();
+                        if (costoNuevo < costos[j]) {
+                            costos[j] = costoNuevo;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Filtrar las sucursales que cumplen con la latencia y armo el String
+        for (int i = 0; i < tope; i++) {
+            if (costos[i] <= latenciaLimite && i != posOrigen) { // i != excluye a si mismo
+                Sucursal sucursal = sucursales[i];
+                listaSucursalesConLatenciaValida.insertar(sucursal);
+            }
+        }
+
+        listaSucursalesConLatenciaValida.ordenar();
+
+        return listaSucursalesConLatenciaValida.convertirListaAString();
+    }
+
+    private int obtenerVerticeNoVisitadoDeMenorCosto(boolean[] visitados, int[] costos) {
+        int pos = -1;
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < tope; i++) {
+            if( !visitados[i] && costos[i] < min ){
+                min = costos[i];
+                pos = i;
+            }
+        }
+        return pos;
+    }
 }

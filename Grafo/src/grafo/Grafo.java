@@ -238,8 +238,8 @@ Loop (cantidad de vertices):
             }
 
         }
-        System.out.println(Arrays.toString(costos));
-        System.out.println(Arrays.toString(anterior));
+//        System.out.println(Arrays.toString(costos));
+//        System.out.println(Arrays.toString(anterior));
         return costos[posDestino];
     }
 

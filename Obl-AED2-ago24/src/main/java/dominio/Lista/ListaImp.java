@@ -1,10 +1,11 @@
 package dominio.Lista;
 
+import dominio.Sucursales.Sucursal;
 import interfaz.Lista;
 
 import java.util.Iterator;
 
-public class ListaImp<T> implements Lista<T> {
+public class ListaImp<T extends Comparable<T>> implements Lista<T> {
 
     protected NodoLista<T> inicio;
     protected int largo;
@@ -18,6 +19,10 @@ public class ListaImp<T> implements Lista<T> {
     public void insertar(T dato) {
         inicio = new NodoLista<T>(dato, inicio);
         largo++;
+    }
+
+    public NodoLista<T> getNodo() {
+        return inicio;
     }
 
     @Override
@@ -86,6 +91,7 @@ public class ListaImp<T> implements Lista<T> {
             this.sig = sig;
         }
 
+
         @Override
         public String toString() {
             return dato.toString();
@@ -93,5 +99,45 @@ public class ListaImp<T> implements Lista<T> {
 
     }
 
+    public void ordenar() {
+        if (inicio == null || inicio.getSig() == null) {
+            // La lista es vacia o tiene un solo elemento
+            return;
+        }
+
+        boolean huboIntercambios;
+        do {
+            NodoLista<T> actual = (NodoLista<T>) inicio;
+            NodoLista<T> siguiente = (NodoLista<T>) inicio.getSig();
+            huboIntercambios = false;
+
+            while (siguiente != null) {
+                // Comparar los elementos si T es una instancia de Comparable
+                if (actual.getDato().compareTo(siguiente.getDato()) > 0) {
+                    // Intercambiar los datos de los nodos si están en el orden incorrecto
+                    T temp = actual.getDato();
+                    actual.setDato(siguiente.getDato());
+                    siguiente.setDato(temp);
+                    huboIntercambios = true;
+                }
+                actual = siguiente;
+                siguiente = siguiente.getSig();
+            }
+        } while (huboIntercambios);
+    }
+
+    public String convertirListaAString() {
+        String resultado = "";
+        NodoLista<T> actual = inicio;
+
+        while (actual != null) {
+            // Asumimos que T es Sucursal, así que podemos hacer un cast
+            Sucursal sucursal = (Sucursal) actual.getDato();
+            resultado += sucursal.getCodigo()+";"+sucursal.getNombre()+"|";
+            actual = actual.getSig();
+        }
+
+        return resultado;
+    }
 
 }
