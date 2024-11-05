@@ -175,11 +175,12 @@ public class ImplementacionSistema implements Sistema {
         if (latencia < 0) {
             return Retorno.error1("Latencia no puede ser menor a 0");
         }
-
+        if(codigoSucursal1==null || codigoSucursal1.isEmpty() || codigoSucursal2==null || codigoSucursal2.isEmpty()){
+            return Retorno.error2("Los parametros no pueden estar vacios o ser nulos.");
+        }
         if (!sucursales.existeSucursal(codigoSucursal1) || !sucursales.existeSucursal(codigoSucursal2)) {
             return Retorno.error3("No existe sucursal registrada para uno de los códigos ingresados"); // sucursal no existe
         }
-
         if (sucursales.existeConexion(codigoSucursal1,codigoSucursal2)) {
             return Retorno.error4("Conexion ya existente entre ambas sucursales");
         }
@@ -194,7 +195,9 @@ public class ImplementacionSistema implements Sistema {
         if (latencia < 0) {
             return Retorno.error1("Latencia no puede ser menor a 0");
         }
-
+        if(codigoSucursal1==null || codigoSucursal1.isEmpty() || codigoSucursal2==null || codigoSucursal2.isEmpty()){
+            return Retorno.error2("Los parametros no pueden estar vacios o ser nulos.");
+        }
         if (!sucursales.existeSucursal(codigoSucursal1) || !sucursales.existeSucursal(codigoSucursal2)) {
             return Retorno.error3("No existe sucursal registrada para uno de los códigos ingresados"); // sucursal no existe
         }
@@ -210,8 +213,11 @@ public class ImplementacionSistema implements Sistema {
 
     @Override
     public Retorno analizarSucursal(String codigoSucursal) {
+        if(codigoSucursal==null || codigoSucursal.isEmpty()){
+            return Retorno.error1("El codigo de sucursal no puede estar vacio o ser nulo.");
+        }
         if (!sucursales.existeSucursal(codigoSucursal)) {
-            return Retorno.error1("La sucursal no existe.");
+            return Retorno.error2("La sucursal no existe.");
         }
 
         String resultado = sucursales.dfsSucursalCritica(codigoSucursal);
@@ -222,6 +228,16 @@ public class ImplementacionSistema implements Sistema {
 
     @Override
     public Retorno sucursalesParaTorneo(String codigoSucursalAnfitriona, int latenciaLimite) {
+        if(codigoSucursalAnfitriona==null || codigoSucursalAnfitriona.isEmpty()){
+            return Retorno.error1("El codigo de sucursal no puede estar vacio o ser nulo.");
+        }
+        if (!sucursales.existeSucursal(codigoSucursalAnfitriona)) {
+            return Retorno.error2("La sucursal no existe.");
+        }
+        if (latenciaLimite <= 0) {
+            return Retorno.error1("Latencia debe ser mayor a 0");
+        }
+
         return Retorno.noImplementada();
     }
 }
