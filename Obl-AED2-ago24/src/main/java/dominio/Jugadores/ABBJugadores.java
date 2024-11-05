@@ -51,7 +51,7 @@ public class ABBJugadores<T extends Comparable<T>> {
             } else {
                 insertarRec(nodo.getDer(), nuevoJugador);
             }
-        } else {
+        } else if (nuevoJugador.getAlias().compareTo(nodo.getAlias()) < 0){
             if (nodo.getIzq() == null) {
                 nodo.setIzq(nuevoJugador);
             } else {
