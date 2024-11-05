@@ -136,17 +136,36 @@ public class GrafoSucursales {
         return lista;
     }
 
-    public int dfsContarNodos() {
+    // Tengo que pasarle la sucu
+    // Recorrer desde la sucu DFS
+    // Ver la cantidad en array de visitados
+    // Recorrer sucu desde otro lugar pero marcando ya codSucursal como visitado
+    // Ver si la cantidad de visitados es < que visitados-1
+
+    public String dfsSucursalCritica(String codSucursal) {
         boolean[] visitados = new boolean[tope];
-        int componentes = 0;
+        boolean[] visitados2 = new boolean[tope];
 
         for (int i = 0; i < tope; i++) {
             if (sucursales[i] != null && !visitados[i]) {
                 dfsRec(i, visitados);
-                componentes++;
             }
         }
-        return componentes;
+
+        int pos = obtenerPos(codSucursal);
+        visitados2[pos] = true;
+        for (int i = 0; i < tope; i++) {
+            if (sucursales[i] != null && !visitados2[i]) {
+                dfsRec(i, visitados2);
+            }
+        }
+
+        if(visitados.length!=visitados2.length){
+            return "SI";
+        }else{
+            return "NO";
+        }
+
     }
 
     private void dfsRec(int pos, boolean[] visitados) {

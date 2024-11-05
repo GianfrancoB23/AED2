@@ -11,6 +11,9 @@ import interfaz.*;
 
 public class ImplementacionSistema implements Sistema {
 
+    // Gianfranco Bonanni - Numero de estudiante: 274029
+    // Gabriel Moreno - Numero de estudiante: 274029
+
     private int maxSucursales;
 
     private ABBJugadores abbJugadores;
@@ -211,20 +214,7 @@ public class ImplementacionSistema implements Sistema {
             return Retorno.error1("La sucursal no existe.");
         }
 
-        // DFS para contar sucursales INICIO
-        int ctdSucursalesInicio = sucursales.dfsContarNodos();
-
-        // Eliminar temporalmente la sucursal y sus conexiones
-        Sucursal sucursalEliminada = sucursales.obtenerSucursal(codigoSucursal);
-        sucursales.borrarSucursal(codigoSucursal);
-
-        // DFS para contar sucursales
-        int ctdSucursalesFinal = sucursales.dfsContarNodos();
-
-        // Inserto nuevamente la sucursal y sus conexiones
-        sucursales.agregarSucursal(sucursalEliminada);
-
-        String resultado = (ctdSucursalesFinal > ctdSucursalesInicio) ? "SI" : "NO";
+        String resultado = sucursales.dfsSucursalCritica(codigoSucursal);
 
         return Retorno.ok(resultado);
     }
