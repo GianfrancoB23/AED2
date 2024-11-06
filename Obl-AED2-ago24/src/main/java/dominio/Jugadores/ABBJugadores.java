@@ -27,11 +27,6 @@ public class ABBJugadores<T extends Comparable<T>> {
     }
 
     public void insertar(Jugador nuevoJugador) {
-        if (this.raiz == null) {
-            this.raiz = nuevoJugador;
-        } else {
-            insertarRec(this.raiz, nuevoJugador);
-        }
 
         // Insertar segun categoria
         if (nuevoJugador.getCategoria() == Categoria.PRINCIPIANTE) {
@@ -40,6 +35,11 @@ public class ABBJugadores<T extends Comparable<T>> {
             ABBEstandar.insertarEnCategoria(nuevoJugador);
         } else if (nuevoJugador.getCategoria() == Categoria.PROFESIONAL) {
             ABBProfesional.insertarEnCategoria(nuevoJugador);
+        }
+        if (this.raiz == null) {
+            this.raiz = nuevoJugador;
+        } else {
+            insertarRec(this.raiz, nuevoJugador);
         }
     }
 
@@ -51,7 +51,7 @@ public class ABBJugadores<T extends Comparable<T>> {
             } else {
                 insertarRec(nodo.getDer(), nuevoJugador);
             }
-        } else if (nuevoJugador.getAlias().compareTo(nodo.getAlias()) < 0){
+        } else if (nuevoJugador.getAlias().compareTo(nodo.getAlias()) < 0) {
             if (nodo.getIzq() == null) {
                 nodo.setIzq(nuevoJugador);
             } else {
@@ -62,10 +62,13 @@ public class ABBJugadores<T extends Comparable<T>> {
 
     // Inserto segun cat
     private void insertarEnCategoria(Jugador nuevoJugador) {
-        if (this.raiz == null) {
-            this.raiz = nuevoJugador;
-        } else {
-            insertarRec(this.raiz, nuevoJugador);
+        if (nuevoJugador.getCategoria() == this.categoria && this.categoria != null) {
+
+            if (this.raiz == null) {
+                this.raiz = nuevoJugador;
+            } else {
+                insertarRec(this.raiz, nuevoJugador);
+            }
         }
     }
 

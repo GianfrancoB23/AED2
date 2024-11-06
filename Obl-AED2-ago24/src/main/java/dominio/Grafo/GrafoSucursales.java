@@ -44,8 +44,9 @@ public class GrafoSucursales {
     }
 
     private int obtenerPos(String codSucu) {
+        // TODO Revisar after modificacion de registro
         for (int i = 0; i < tope; i++) {
-            if(codSucu.equals(sucursales[i].getCodigo())){
+            if(sucursales[i] != null && codSucu.equals(sucursales[i].getCodigo())){
                 return i;
             }
         }
