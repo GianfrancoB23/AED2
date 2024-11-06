@@ -6,6 +6,7 @@ import dominio.Equipos.Equipo;
 import dominio.Jugadores.ABBJugadores;
 import dominio.Jugadores.Jugador;
 import dominio.Jugadores.ResultadoBusquedaJugador;
+import dominio.Sucursales.RetornoSucursales;
 import dominio.Sucursales.Sucursal;
 import interfaz.*;
 
@@ -238,12 +239,8 @@ public class ImplementacionSistema implements Sistema {
             return Retorno.error3("Latencia debe ser mayor a 0");
         }
 
-        String resultado = sucursales.dijkstra(codigoSucursalAnfitriona, latenciaLimite);
+        RetornoSucursales resultado = sucursales.dijkstra(codigoSucursalAnfitriona, latenciaLimite);
 
-        if (resultado.isEmpty()) {
-            return Retorno.error4("No se encontraron sucursales dentro del límite de latencia.");
-        }
-
-        return Retorno.ok(resultado);
+        return Retorno.ok(resultado.getLatenciaMaxima(),resultado.getSucursales());
     }
 }

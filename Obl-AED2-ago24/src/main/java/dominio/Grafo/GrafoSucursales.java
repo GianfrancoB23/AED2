@@ -2,6 +2,7 @@ package dominio.Grafo;
 
 import dominio.Lista.ListaImp;
 import dominio.Sucursales.Conexion;
+import dominio.Sucursales.RetornoSucursales;
 import dominio.Sucursales.Sucursal;
 import interfaz.Lista;
 
@@ -143,46 +144,90 @@ public class GrafoSucursales {
     // Recorrer sucu desde otro lugar pero marcando ya codSucursal como visitado
     // Ver si la cantidad de visitados es < que visitados-1
 
+//    public String dfsSucursalCritica(String codSucursal) {
+//        int pos = obtenerPos(codSucursal);
+//        if (pos == -1) {
+//            return "NO"; // La sucursal no existe
+//        }
+//
+//        boolean[] visitados = new boolean[tope];
+//        boolean[] visitados2 = new boolean[tope];
+//
+//        for (int i = 0; i < tope; i++) {
+//            if (sucursales[i] != null && !visitados[i]) {
+//                dfsRec(i, visitados);
+//            }
+//        }
+//
+//        visitados2[pos] = true;
+//        for (int i = 0; i < tope; i++) {
+//            if (sucursales[i] != null && !visitados2[i]) {
+//                dfsRec(i, visitados2);
+//            }
+//        }
+//
+//        if(visitados.length!=visitados2.length){
+//            return "SI";
+//        }else{
+//            return "NO";
+//        }
+//
+//    }
+//
+//    private void dfsRec(int pos, boolean[] visitados) {
+//        visitados[pos] = true;
+//        for (int j = 0; j < tope; j++) {
+//            if (matAdy[pos][j].isExiste() && !visitados[j]) {
+//                dfsRec(j, visitados);
+//            }
+//        }
+//    }
+
     public String dfsSucursalCritica(String codSucursal) {
-        boolean[] visitados = new boolean[tope];
-        boolean[] visitados2 = new boolean[tope];
-
-        for (int i = 0; i < tope; i++) {
-            if (sucursales[i] != null && !visitados[i]) {
-                dfsRec(i, visitados);
-            }
-        }
-
         int pos = obtenerPos(codSucursal);
-        visitados2[pos] = true;
+        if (pos == -1) {
+            return "NO"; // La sucursal no existe
+        }
+
+        // Contar todas las sucursales al principio
+        boolean[] visitadoInicial = new boolean[tope];
+        int sucursalesIniciales = contarSucursales(visitadoInicial);
+
+
+        boolean[] visitadoFinal = new boolean[tope];
+        visitadoFinal[pos]=true; // Se marca la sucursal como visitado
+        int sucursalesFinales = contarSucursales(visitadoFinal);
+
+        // Si el numero de sucursales aumento es critica
+        return (sucursalesFinales > sucursalesIniciales) ? "SI" : "NO";
+    }
+
+    // Cuenta las sucursales
+    private int contarSucursales(boolean[] visitado) {
+        int ctd = 0;
         for (int i = 0; i < tope; i++) {
-            if (sucursales[i] != null && !visitados2[i]) {
-                dfsRec(i, visitados2);
+            if (sucursales[i] != null && !visitado[i]) {
+                dfsRec(i, visitado);
+                ctd++;
             }
         }
-
-        if(visitados.length!=visitados2.length){
-            return "SI";
-        }else{
-            return "NO";
-        }
-
+        return ctd;
     }
 
-    private void dfsRec(int pos, boolean[] visitados) {
-        visitados[pos] = true;
+    private void dfsRec(int pos, boolean[] visitado) {
+        visitado[pos] = true;
         for (int j = 0; j < tope; j++) {
-            if (matAdy[pos][j].isExiste() && !visitados[j]) {
-                dfsRec(j, visitados);
+            if (matAdy[pos][j].isExiste() && !visitado[j]) {
+                dfsRec(j, visitado);
             }
         }
     }
 
-    public String dijkstra(String vOrigen, int latenciaLimite) {
+    public RetornoSucursales dijkstra(String vOrigen, int latenciaLimite) {
         int posOrigen = obtenerPos(vOrigen);
+        RetornoSucursales retorno = new RetornoSucursales();
         ListaImp<Sucursal> listaSucursalesConLatenciaValida = new ListaImp<>();
 
-        // Inicializar estructuras
         boolean[] visitados = new boolean[tope];
         int[] costos = new int[tope];
 
@@ -209,18 +254,24 @@ public class GrafoSucursales {
                 }
             }
         }
-
+        
         // Filtrar las sucursales que cumplen con la latencia y armo el String
         for (int i = 0; i < tope; i++) {
-            if (costos[i] <= latenciaLimite && i != posOrigen) { // i != excluye a si mismo
+            if (costos[i] <= latenciaLimite) {
                 Sucursal sucursal = sucursales[i];
                 listaSucursalesConLatenciaValida.insertar(sucursal);
+
+                // Verifica si el costo es mayor y lo setea.
+                if(costos[i]>retorno.getLatenciaMaxima()){
+                    retorno.setLatenciaMaxima(costos[i]);
+                }
             }
         }
 
         listaSucursalesConLatenciaValida.ordenar();
+        retorno.setSucursales(listaSucursalesConLatenciaValida.convertirListaAString());
 
-        return listaSucursalesConLatenciaValida.convertirListaAString();
+        return retorno;
     }
 
     private int obtenerVerticeNoVisitadoDeMenorCosto(boolean[] visitados, int[] costos) {

@@ -137,7 +137,7 @@ public class ListaImp<T extends Comparable<T>> implements Lista<T> {
             actual = actual.getSig();
         }
 
-        return resultado;
+        return resultado.substring(0,resultado.length()-1); // Se hace un substring para quitar el ultimo |
     }
 
 }
