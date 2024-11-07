@@ -254,7 +254,7 @@ public class GrafoSucursales {
                 }
             }
         }
-        
+
         // Filtrar las sucursales que cumplen con la latencia y armo el String
         for (int i = 0; i < tope; i++) {
             if (costos[i] <= latenciaLimite) {

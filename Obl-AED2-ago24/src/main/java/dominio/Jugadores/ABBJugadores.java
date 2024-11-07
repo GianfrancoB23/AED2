@@ -126,6 +126,10 @@ public class ABBJugadores<T extends Comparable<T>> {
     //Como esta insertado ABB por alias, ya esta ordenado
     private String inOrden(Jugador nodo) { // izq - nodo - der
         String ret = "";
+        if (nodo == null) {
+            return ret;
+        }
+        
         if (nodo != null) {
             ret += inOrden(nodo.getIzq());
             ret += nodo.getAlias() + ";" + nodo.getNombre() + ";" + nodo.getApellido() + ";" + nodo.getCategoria().toString() + "|";

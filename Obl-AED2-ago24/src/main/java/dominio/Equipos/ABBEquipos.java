@@ -73,7 +73,12 @@ public class ABBEquipos <T extends Comparable<T>>{
     }
 
     public String inOrden() {
-        return inOrden(this.raiz);
+        String ret = inOrden(this.raiz);
+        if(!ret.isEmpty()){
+            return ret.substring(0,ret.length()-1);
+        }else{
+            return ret;
+        }
     }
 
     //Como esta insertado ABB por nombre, ya esta ordenado
