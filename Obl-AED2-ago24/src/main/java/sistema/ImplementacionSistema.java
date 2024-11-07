@@ -77,8 +77,6 @@ public class ImplementacionSistema implements Sistema {
         }
 
         // Busca el jugador en el arbol
-        //Jugador jugadorEncontrado = resultado.getJugador();
-        //int nodosRecorridos = resultado.getNodosRecorridos();
         Resultado<Jugador> resultado = abbJugadores.buscar(new Jugador(alias, null,null,null));
         int nodosRecorridos = resultado.getNodosRecorridos();
 
@@ -157,8 +155,6 @@ public class ImplementacionSistema implements Sistema {
         jugadorEncontrado.setEquipo(equipoEncontrado);
 
         // Agrego el jugador al equipo
-        //Creamos un jugador con los datos del jugador existente para poder ingresarlo al abbJugadores dentro del equipo, porque si le pasamos directo el nodo ya tiene seteado getDer y getIzq
-        Jugador jugadorEquipo = new Jugador(jugador.getAlias(),jugador.getNombre(),jugador.getApellido(),jugador.getCategoria(), equipoEncontrado);
         equipoEncontrado.jugadores.insertar(jugadorEncontrado);
         equipoEncontrado.sumarIntegrante();
 

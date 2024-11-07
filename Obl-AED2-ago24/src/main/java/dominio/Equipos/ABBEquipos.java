@@ -1,3 +1,5 @@
+// OBSOLETO: Mantenido por las dudas
+
 package dominio.Equipos;
 
 public class ABBEquipos <T extends Comparable<T>>{

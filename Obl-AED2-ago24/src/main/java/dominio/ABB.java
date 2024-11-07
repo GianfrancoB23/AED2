@@ -23,22 +23,6 @@ public class ABB<T extends Comparable<T>> {
         return nodo;
     }
 
-    public int contarNodos() {
-        return contarNodosRecursivo(raiz);
-    }
-
-    private int contarNodosRecursivo(Nodo<T> nodo) {
-        if (nodo == null) {
-            return 0;
-        }
-        return 1 + contarNodosRecursivo(nodo.getIzquierdo()) + contarNodosRecursivo(nodo.getDerecho());
-    }
-
-
-    private class Contador {
-        int count = 0;
-    }
-
     public Resultado<T> buscar(T dato) {
         return buscarRecursivo(raiz, dato, 0);
     }
@@ -59,7 +43,6 @@ public class ABB<T extends Comparable<T>> {
     }
     public String inOrden() {
         String resultado = inOrdenRec(raiz);
-        // Elimina el último separador si no está vacío
         if (!resultado.isEmpty() && resultado.endsWith("|")) {
             resultado = resultado.substring(0, resultado.length() - 1);
         }
@@ -87,7 +70,6 @@ public class ABB<T extends Comparable<T>> {
 
     public String inOrdenDesc() {
         String resultado = inOrdenDescRec(raiz);
-        // Elimina el último separador si no está vacío
         if (!resultado.isEmpty() && resultado.endsWith("|")) {
             resultado = resultado.substring(0, resultado.length() - 1);
         }

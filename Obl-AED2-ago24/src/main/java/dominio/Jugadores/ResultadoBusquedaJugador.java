@@ -1,3 +1,5 @@
+// OBSOLETO: Mantenido por las dudas
+
 package dominio.Jugadores;
 
 // Se crea clase de ResultadoBusquedaJugador para pasar el nodo y la cantidad recorridos

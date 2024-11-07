@@ -1,3 +1,5 @@
+// OBSOLETO: Mantenido por las dudas
+
 package dominio.Jugadores;
 
 import interfaz.Categoria;
