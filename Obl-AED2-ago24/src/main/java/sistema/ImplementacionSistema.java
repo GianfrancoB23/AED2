@@ -13,7 +13,7 @@ import interfaz.*;
 public class ImplementacionSistema implements Sistema {
 
     // Gianfranco Bonanni - Numero de estudiante: 274029
-    // Gabriel Moreno - Numero de estudiante: 274029
+    // Gabriel Moreno - Numero de estudiante: 222706
 
     private int maxSucursales;
 
