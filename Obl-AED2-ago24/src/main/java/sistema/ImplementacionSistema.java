@@ -46,6 +46,7 @@ public class ImplementacionSistema implements Sistema {
             return Retorno.error2("Ya existe un jugador con ese alias");
         }
 
+        // Cambiarlo y hacer que registre el jugadro en abbJugadores y en el abb segun la categoria que le corresponda
         Jugador nuevoJugador = new Jugador(alias, nombre, apellido, categoria);
         abbJugadores.insertar(nuevoJugador);
 
