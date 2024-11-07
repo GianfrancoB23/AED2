@@ -1,11 +1,13 @@
 package sistema;
 
+import dominio.ABB;
 import dominio.Equipos.ABBEquipos;
 import dominio.Grafo.GrafoSucursales;
 import dominio.Equipos.Equipo;
 import dominio.Jugadores.ABBJugadores;
 import dominio.Jugadores.Jugador;
 import dominio.Jugadores.ResultadoBusquedaJugador;
+import dominio.Resultado;
 import dominio.Sucursales.RetornoSucursales;
 import dominio.Sucursales.Sucursal;
 import interfaz.*;
@@ -17,11 +19,11 @@ public class ImplementacionSistema implements Sistema {
 
     private int maxSucursales;
 
-    private ABBJugadores abbJugadores;
-    private ABBJugadores abbPrincipiantes;
-    private ABBJugadores abbEstandard;
-    private ABBJugadores abbProfesionales;
-    private ABBEquipos abbEquipos;
+    private ABB<Jugador> abbJugadores;
+    private ABB<Jugador> abbPrincipiantes;
+    private ABB<Jugador> abbEstandard;
+    private ABB<Jugador> abbProfesionales;
+    private ABB<Equipo> abbEquipos;
     private GrafoSucursales sucursales;
 
     @Override
@@ -32,11 +34,11 @@ public class ImplementacionSistema implements Sistema {
 
         this.maxSucursales = maxSucursales;
 
-        this.abbJugadores = new ABBJugadores();
-        this.abbPrincipiantes = new ABBJugadores();
-        this.abbEstandard = new ABBJugadores();
-        this.abbProfesionales = new ABBJugadores();
-        this.abbEquipos = new ABBEquipos();
+        this.abbJugadores = new ABB<>();
+        this.abbPrincipiantes = new ABB<>();
+        this.abbEstandard = new ABB<>();
+        this.abbProfesionales = new ABB<>();
+        this.abbEquipos = new ABB<>();
         this.sucursales = new GrafoSucursales(maxSucursales);
 
         return Retorno.ok();
@@ -44,11 +46,13 @@ public class ImplementacionSistema implements Sistema {
 
     @Override
     public Retorno registrarJugador(String alias, String nombre, String apellido, Categoria categoria) {
+        Jugador nuevoJugadorAbbGeneral = new Jugador(alias, nombre, apellido, categoria);
+        Resultado<Jugador> busqueda = abbJugadores.buscar(nuevoJugadorAbbGeneral);
         if (alias == null || alias.isEmpty() || nombre == null || nombre.isEmpty() ||
                 apellido == null || apellido.isEmpty() || categoria == null) {
             return Retorno.error1("Parametro vacio o null");
         }
-        if (abbJugadores.existe(alias)) {
+        if (busqueda.getDato() != null) {
             return Retorno.error2("Ya existe un jugador con ese alias");
         }
 
@@ -61,7 +65,6 @@ public class ImplementacionSistema implements Sistema {
         } else if(categoria==Categoria.PROFESIONAL) {
             abbProfesionales.insertar(nuevoJugador);
         }
-        Jugador nuevoJugadorAbbGeneral = new Jugador(alias, nombre, apellido, categoria);
         abbJugadores.insertar(nuevoJugadorAbbGeneral);
 
         return Retorno.ok();
@@ -74,19 +77,20 @@ public class ImplementacionSistema implements Sistema {
         }
 
         // Busca el jugador en el arbol
-        ResultadoBusquedaJugador resultado = abbJugadores.obtenerJugador(alias);
-        Jugador jugadorEncontrado = resultado.getJugador();
+        //Jugador jugadorEncontrado = resultado.getJugador();
+        //int nodosRecorridos = resultado.getNodosRecorridos();
+        Resultado<Jugador> resultado = abbJugadores.buscar(new Jugador(alias, null,null,null));
         int nodosRecorridos = resultado.getNodosRecorridos();
 
-        if (jugadorEncontrado == null) {
+        if (resultado.getDato() == null) {
             return Retorno.error2("No se encontro jugador con ese alias, se recorrieron " + nodosRecorridos + " nodos.");
         }
 
         // Formateo la informacion para mostrar
-        String valorString = jugadorEncontrado.getAlias() + ";" +
-                jugadorEncontrado.getNombre() + ";" +
-                jugadorEncontrado.getApellido() + ";" +
-                jugadorEncontrado.getCategoria().toString();
+        String valorString = resultado.getDato().getAlias() + ";" +
+                resultado.getDato().getNombre() + ";" +
+                resultado.getDato().getApellido() + ";" +
+                resultado.getDato().getCategoria().toString();
 
         return Retorno.ok(nodosRecorridos, valorString);
     }
@@ -112,13 +116,13 @@ public class ImplementacionSistema implements Sistema {
 
     @Override
     public Retorno registrarEquipo(String nombre, String manager) {
+        Equipo equipoNuevo = new Equipo(nombre, manager);
         if(nombre == null || manager == null || nombre.isEmpty() || manager.isEmpty()){
             return Retorno.error1("Uno de los parametros es nulo o esta vacio.");
         }
-        if(abbEquipos.existe(nombre)){
+        if(abbEquipos.buscar(equipoNuevo).getDato()!=null){
             return Retorno.error2("El equipo ya se encuentra registrado.");
         }
-        Equipo equipoNuevo = new Equipo(nombre, manager);
         abbEquipos.insertar(equipoNuevo);
 
         return Retorno.ok("Se ha ingresado el equipo " + equipoNuevo.getNombre());
@@ -126,49 +130,52 @@ public class ImplementacionSistema implements Sistema {
 
     @Override
     public Retorno agregarJugadorAEquipo(String nombreEquipo, String aliasJugador) {
+        Jugador jugador = new Jugador(aliasJugador, null, null, null);
+        Jugador jugadorEncontrado = abbJugadores.buscar(jugador).getDato();
+        Equipo equipoAux = new Equipo(nombreEquipo, null);
+        Equipo equipoEncontrado = abbEquipos.buscar(equipoAux).getDato();
         if(nombreEquipo == null || aliasJugador == null ||nombreEquipo.isEmpty() || aliasJugador.isEmpty()){
             return Retorno.error1("Uno de los parametros esta vacio o es nulo.");
         }
-        if(!abbEquipos.existe(nombreEquipo)){
+        if(equipoEncontrado==null){
             return Retorno.error2("No existe equipo con ese nombre.");
         }
-        if(!abbJugadores.existe(aliasJugador)){
+        if(jugadorEncontrado==null){
             return Retorno.error3("No existe jugador con ese alias.");
         }
-        Equipo equipo = abbEquipos.obtenerEquipo(nombreEquipo);
-        if(equipo.getCtdIntegrantes()==5){
+        if(equipoEncontrado.getCtdIntegrantes()==5){
             return Retorno.error4("El equipo ya tiene 5 integrantes.");
         }
-        Jugador jugador = abbJugadores.obtenerJugador(aliasJugador).getJugador();
-        if(jugador.getCategoria().toString() != "PROFESIONAL"){
+        if(jugadorEncontrado.getCategoria().toString() != "PROFESIONAL"){
             return Retorno.error5("El jugador no tiene categoria 'Profesional'");
         }
-        if(abbJugadores.obtenerJugador(aliasJugador).getJugador().getEquipo() != null){
+        if(jugadorEncontrado.getEquipo() != null){
             return Retorno.error6("El jugador ya pertenece a otro equipo");
         }
 
         // Seteo el equipo en el jugador
-        jugador.setEquipo(abbEquipos.obtenerEquipo(nombreEquipo));
+        jugadorEncontrado.setEquipo(equipoEncontrado);
 
         // Agrego el jugador al equipo
         //Creamos un jugador con los datos del jugador existente para poder ingresarlo al abbJugadores dentro del equipo, porque si le pasamos directo el nodo ya tiene seteado getDer y getIzq
-        Jugador jugadorEquipo = new Jugador(jugador.getAlias(),jugador.getNombre(),jugador.getApellido(),jugador.getCategoria(), abbEquipos.obtenerEquipo(nombreEquipo));
-        equipo.jugadores.insertar(jugadorEquipo);
-        equipo.sumarIntegrante();
+        Jugador jugadorEquipo = new Jugador(jugador.getAlias(),jugador.getNombre(),jugador.getApellido(),jugador.getCategoria(), equipoEncontrado);
+        equipoEncontrado.jugadores.insertar(jugadorEquipo);
+        equipoEncontrado.sumarIntegrante();
 
-        return Retorno.ok("El jugador " + jugador.getAlias() + " ha sido agregado al equipo " + equipo.getNombre() + " correctamente.");
+        return Retorno.ok("El jugador " + jugador.getAlias() + " ha sido agregado al equipo " + equipoEncontrado.getNombre() + " correctamente.");
     }
 
     @Override
     public Retorno listarJugadoresDeEquipo(String nombreEquipo) {
+        Equipo equipoAux = new Equipo(nombreEquipo, null);
         if(nombreEquipo == null || nombreEquipo.isEmpty()){
             return Retorno.error1("El nombre del equipo esta vacio o es nulo.");
         }
-        if(!abbEquipos.existe(nombreEquipo)){
+        if(abbEquipos.buscar(equipoAux).getDato()==null){
             return Retorno.error2("No existe un equipo con ese nombre");
         }
 
-        String jugadores = abbEquipos.obtenerEquipo(nombreEquipo).jugadores.inOrden();
+        String jugadores = abbEquipos.buscar(equipoAux).getDato().jugadores.inOrden();
 
         return Retorno.ok(jugadores);
     }

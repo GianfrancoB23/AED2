@@ -1,6 +1,8 @@
 package dominio.Equipos;
 
+import dominio.ABB;
 import dominio.Jugadores.ABBJugadores;
+import dominio.Jugadores.Jugador;
 
 import java.util.Objects;
 
@@ -8,7 +10,7 @@ public class Equipo implements Comparable<Equipo> {
     private String nombre;
     private String manager;
     private int ctdIntegrantes;
-    public ABBJugadores jugadores;
+    public ABB<Jugador> jugadores;
 
     private Equipo izq;
     private Equipo der;
@@ -17,7 +19,7 @@ public class Equipo implements Comparable<Equipo> {
         this.nombre = nombre;
         this.manager = manager;
         this.ctdIntegrantes = 0;
-        this.jugadores = new ABBJugadores<>();
+        this.jugadores = new ABB<>();
         this.izq = null;
         this.der = null;
     }
@@ -48,4 +50,9 @@ public class Equipo implements Comparable<Equipo> {
 
     @Override
     public int compareTo(Equipo eq) {return this.nombre.compareTo(eq.getNombre());}
+
+    @Override
+    public String toString() {
+        return this.getNombre() + ";" + this.getManager() + ";" + this.getCtdIntegrantes();
+    }
 }

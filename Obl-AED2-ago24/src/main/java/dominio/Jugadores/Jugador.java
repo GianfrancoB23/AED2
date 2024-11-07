@@ -106,7 +106,7 @@ public class Jugador implements Comparable<Jugador>{
     //TODO Terminar el toString
     @Override
     public String toString() {
-        return super.toString();
+        return this.getAlias() + ";" + this.getNombre() + ";" + this.getApellido() + ";" + this.getCategoria().toString();
     }
 
 }
