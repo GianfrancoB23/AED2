@@ -110,8 +110,6 @@ public class ABBJugadores<T extends Comparable<T>> {
         }
         return ret;
     }
-
-<<<<<<< Updated upstream
     public String listarJugadorEquipo(String nombreEquipo) {
         String ret = listarJugadorEquipo(this.raiz, nombreEquipo);
         if(!ret.isEmpty()) {
@@ -135,22 +133,6 @@ public class ABBJugadores<T extends Comparable<T>> {
         }
         return ret;
     }
-
-    public String buscarXCat(Categoria cat) {
-        if (cat == ABBEstandar.getCategoria()) {
-            return buscarXCatRec(ABBEstandar.raiz);
-        }
-        if (cat == ABBPrincipiante.getCategoria()) {
-            return buscarXCatRec(ABBPrincipiante.raiz);
-        }
-        if (cat == ABBProfesional.getCategoria()) {
-            return buscarXCatRec(ABBProfesional.raiz);
-        }
-        return "Esa categoria no existe.";
-    }
-
-=======
->>>>>>> Stashed changes
     private String buscarXCatRec(Jugador nodo) {
         String ret = "";
         if (nodo != null) {
