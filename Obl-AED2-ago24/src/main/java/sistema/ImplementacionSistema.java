@@ -54,14 +54,15 @@ public class ImplementacionSistema implements Sistema {
 
         // Cambiarlo y hacer que registre el jugadro en abbJugadores y en el abb segun la categoria que le corresponda
         Jugador nuevoJugador = new Jugador(alias, nombre, apellido, categoria);
-        if(categoria.toString()=="PRINCIPIANTE") {
+        if(categoria==Categoria.PRINCIPIANTE) {
             abbPrincipiantes.insertar(nuevoJugador);
-        } else if (categoria.toString()=="ESTANDARD") {
+        } else if (categoria==Categoria.ESTANDARD) {
             abbEstandard.insertar(nuevoJugador);
-        } else if(categoria.toString()=="PROFESIONAL") {
+        } else if(categoria==Categoria.PROFESIONAL) {
             abbProfesionales.insertar(nuevoJugador);
         }
-        abbJugadores.insertar(nuevoJugador);
+        Jugador nuevoJugadorAbbGeneral = new Jugador(alias, nombre, apellido, categoria);
+        abbJugadores.insertar(nuevoJugadorAbbGeneral);
 
         return Retorno.ok();
     }
