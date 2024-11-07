@@ -43,12 +43,12 @@ public class ImplementacionSistema implements Sistema {
 
     @Override
     public Retorno registrarJugador(String alias, String nombre, String apellido, Categoria categoria) {
-        Jugador nuevoJugadorAbbGeneral = new Jugador(alias, nombre, apellido, categoria);
-        Resultado<Jugador> busqueda = abbJugadores.buscar(nuevoJugadorAbbGeneral);
         if (alias == null || alias.isEmpty() || nombre == null || nombre.isEmpty() ||
                 apellido == null || apellido.isEmpty() || categoria == null) {
             return Retorno.error1("Parametro vacio o null");
         }
+        Jugador nuevoJugadorAbbGeneral = new Jugador(alias, nombre, apellido, categoria);
+        Resultado<Jugador> busqueda = abbJugadores.buscar(nuevoJugadorAbbGeneral);
         if (busqueda.getDato() != null) {
             return Retorno.error2("Ya existe un jugador con ese alias");
         }
@@ -111,10 +111,10 @@ public class ImplementacionSistema implements Sistema {
 
     @Override
     public Retorno registrarEquipo(String nombre, String manager) {
-        Equipo equipoNuevo = new Equipo(nombre, manager);
         if(nombre == null || manager == null || nombre.isEmpty() || manager.isEmpty()){
             return Retorno.error1("Uno de los parametros es nulo o esta vacio.");
         }
+        Equipo equipoNuevo = new Equipo(nombre, manager);
         if(abbEquipos.buscar(equipoNuevo).getDato()!=null){
             return Retorno.error2("El equipo ya se encuentra registrado.");
         }
@@ -160,10 +160,10 @@ public class ImplementacionSistema implements Sistema {
 
     @Override
     public Retorno listarJugadoresDeEquipo(String nombreEquipo) {
-        Equipo equipoAux = new Equipo(nombreEquipo, null);
         if(nombreEquipo == null || nombreEquipo.isEmpty()){
             return Retorno.error1("El nombre del equipo esta vacio o es nulo.");
         }
+        Equipo equipoAux = new Equipo(nombreEquipo, null);
         if(abbEquipos.buscar(equipoAux).getDato()==null){
             return Retorno.error2("No existe un equipo con ese nombre");
         }
