@@ -130,13 +130,13 @@ public class ImplementacionSistema implements Sistema {
 
     @Override
     public Retorno agregarJugadorAEquipo(String nombreEquipo, String aliasJugador) {
+        if(nombreEquipo == null || aliasJugador == null ||nombreEquipo.isEmpty() || aliasJugador.isEmpty()){
+            return Retorno.error1("Uno de los parametros esta vacio o es nulo.");
+        }
         Jugador jugador = new Jugador(aliasJugador, null, null, null);
         Jugador jugadorEncontrado = abbJugadores.buscar(jugador).getDato();
         Equipo equipoAux = new Equipo(nombreEquipo, null);
         Equipo equipoEncontrado = abbEquipos.buscar(equipoAux).getDato();
-        if(nombreEquipo == null || aliasJugador == null ||nombreEquipo.isEmpty() || aliasJugador.isEmpty()){
-            return Retorno.error1("Uno de los parametros esta vacio o es nulo.");
-        }
         if(equipoEncontrado==null){
             return Retorno.error2("No existe equipo con ese nombre.");
         }
