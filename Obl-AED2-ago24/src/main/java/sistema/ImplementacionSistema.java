@@ -18,6 +18,9 @@ public class ImplementacionSistema implements Sistema {
     private int maxSucursales;
 
     private ABBJugadores abbJugadores;
+    private ABBJugadores abbPrincipiantes;
+    private ABBJugadores abbEstandard;
+    private ABBJugadores abbProfesionales;
     private ABBEquipos abbEquipos;
     private GrafoSucursales sucursales;
 
@@ -30,6 +33,9 @@ public class ImplementacionSistema implements Sistema {
         this.maxSucursales = maxSucursales;
 
         this.abbJugadores = new ABBJugadores();
+        this.abbPrincipiantes = new ABBJugadores();
+        this.abbEstandard = new ABBJugadores();
+        this.abbProfesionales = new ABBJugadores();
         this.abbEquipos = new ABBEquipos();
         this.sucursales = new GrafoSucursales(maxSucursales);
 
@@ -48,6 +54,13 @@ public class ImplementacionSistema implements Sistema {
 
         // Cambiarlo y hacer que registre el jugadro en abbJugadores y en el abb segun la categoria que le corresponda
         Jugador nuevoJugador = new Jugador(alias, nombre, apellido, categoria);
+        if(categoria.toString()=="PRINCIPIANTE") {
+            abbPrincipiantes.insertar(nuevoJugador);
+        } else if (categoria.toString()=="ESTANDARD") {
+            abbEstandard.insertar(nuevoJugador);
+        } else if(categoria.toString()=="PROFESIONAL") {
+            abbProfesionales.insertar(nuevoJugador);
+        }
         abbJugadores.insertar(nuevoJugador);
 
         return Retorno.ok();

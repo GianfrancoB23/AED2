@@ -28,14 +28,14 @@ public class ABBJugadores<T extends Comparable<T>> {
 
     public void insertar(Jugador nuevoJugador) {
 
-        // Insertar segun categoria
+       /* // Insertar segun categoria
         if (nuevoJugador.getCategoria() == Categoria.PRINCIPIANTE) {
             ABBPrincipiante.insertarEnCategoria(nuevoJugador);
         } else if (nuevoJugador.getCategoria() == Categoria.ESTANDARD) {
             ABBEstandar.insertarEnCategoria(nuevoJugador);
         } else if (nuevoJugador.getCategoria() == Categoria.PROFESIONAL) {
             ABBProfesional.insertarEnCategoria(nuevoJugador);
-        }
+        }*/
         if (this.raiz == null) {
             this.raiz = nuevoJugador;
         } else {
@@ -73,6 +73,17 @@ public class ABBJugadores<T extends Comparable<T>> {
     }
 
     public ResultadoBusquedaJugador obtenerJugador(String alias) {
+        /*ResultadoBusquedaJugador ret = null;
+        if(obtenerJugadorRec(ABBPrincipiante.raiz, alias, 0) != null) {
+            ret = obtenerJugadorRec(ABBPrincipiante.raiz, alias, 0);
+        }
+        if(obtenerJugadorRec(ABBEstandar.raiz, alias, 0) != null) {
+            ret = obtenerJugadorRec(ABBEstandar.raiz, alias, 0);
+        }
+        if(obtenerJugadorRec(ABBProfesional.raiz, alias, 0) != null) {
+            ret = obtenerJugadorRec(ABBProfesional.raiz, alias, 0);
+        }
+        return ret;*/
         return obtenerJugadorRec(this.raiz, alias, 0);
     }
 
@@ -95,6 +106,7 @@ public class ABBJugadores<T extends Comparable<T>> {
     }
 
     public boolean existe(String alias) {
+        /*return obtenerJugador(alias) == null;*/
         return existeRec(this.raiz, alias);
     }
 
