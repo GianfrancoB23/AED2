@@ -1,6 +1,6 @@
 package dominio.Equipos;
 
-import dominio.ABB;
+import dominio.ABB.ABB;
 import dominio.Jugadores.Jugador;
 
 import java.util.Objects;

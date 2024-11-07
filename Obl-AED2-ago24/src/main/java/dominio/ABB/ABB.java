@@ -1,4 +1,6 @@
-package dominio;
+package dominio.ABB;
+
+import dominio.Jugadores.Resultado;
 
 public class ABB<T extends Comparable<T>> {
     private Nodo<T> raiz;

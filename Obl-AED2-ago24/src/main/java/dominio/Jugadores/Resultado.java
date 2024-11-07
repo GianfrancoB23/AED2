@@ -1,6 +1,4 @@
-package dominio;
-
-import dominio.Jugadores.Jugador;
+package dominio.Jugadores;
 
 public class Resultado<T> {
 

@@ -1,10 +1,10 @@
 package sistema;
 
-import dominio.ABB;
+import dominio.ABB.ABB;
 import dominio.Grafo.GrafoSucursales;
 import dominio.Equipos.Equipo;
 import dominio.Jugadores.Jugador;
-import dominio.Resultado;
+import dominio.Jugadores.Resultado;
 import dominio.Sucursales.RetornoSucursales;
 import dominio.Sucursales.Sucursal;
 import interfaz.*;
@@ -53,7 +53,7 @@ public class ImplementacionSistema implements Sistema {
             return Retorno.error2("Ya existe un jugador con ese alias");
         }
 
-        // Cambiarlo y hacer que registre el jugadro en abbJugadores y en el abb segun la categoria que le corresponda
+
         Jugador nuevoJugador = new Jugador(alias, nombre, apellido, categoria);
         if(categoria==Categoria.PRINCIPIANTE) {
             abbPrincipiantes.insertar(nuevoJugador);
@@ -62,6 +62,7 @@ public class ImplementacionSistema implements Sistema {
         } else if(categoria==Categoria.PROFESIONAL) {
             abbProfesionales.insertar(nuevoJugador);
         }
+        // Evita el StackOverFlow
         abbJugadores.insertar(nuevoJugadorAbbGeneral);
 
         return Retorno.ok();
@@ -111,10 +112,12 @@ public class ImplementacionSistema implements Sistema {
 
     @Override
     public Retorno registrarEquipo(String nombre, String manager) {
-        Equipo equipoNuevo = new Equipo(nombre, manager);
         if(nombre == null || manager == null || nombre.isEmpty() || manager.isEmpty()){
             return Retorno.error1("Uno de los parametros es nulo o esta vacio.");
         }
+
+        Equipo equipoNuevo = new Equipo(nombre, manager);
+        
         if(abbEquipos.buscar(equipoNuevo).getDato()!=null){
             return Retorno.error2("El equipo ya se encuentra registrado.");
         }

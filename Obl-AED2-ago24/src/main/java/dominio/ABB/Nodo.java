@@ -1,4 +1,4 @@
-package dominio;
+package dominio.ABB;
 
 public class Nodo<T extends Comparable<T>> {
     private T nodo;
