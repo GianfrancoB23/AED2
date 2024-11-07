@@ -182,7 +182,7 @@ public class ImplementacionSistema implements Sistema {
 
     @Override
     public Retorno listarEquiposDescendente() {
-        String equipos = abbEquipos.inOrden();
+        String equipos = abbEquipos.inOrdenDesc();
         return Retorno.ok(equipos);
     }
 

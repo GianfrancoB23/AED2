@@ -85,5 +85,35 @@ public class ABB<T extends Comparable<T>> {
         return resultado;
     }
 
+    public String inOrdenDesc() {
+        String resultado = inOrdenDescRec(raiz);
+        // Elimina el último separador si no está vacío
+        if (!resultado.isEmpty() && resultado.endsWith("|")) {
+            resultado = resultado.substring(0, resultado.length() - 1);
+        }
+        return resultado;
+    }
+    private String inOrdenDescRec(Nodo<T> nodo) {
+        if (nodo == null) {
+            return "";
+        }
+        String derecho = inOrdenDescRec(nodo.getDerecho());
+        String valorNodo = nodo.getNodo().toString();
+        String izquierdo = inOrdenDescRec(nodo.getIzquierdo());
+
+        // Concatenar los valores con el separador "|"
+        String resultado = "";
+        if (!derecho.isEmpty()) {
+            resultado += derecho + "|";
+        }
+
+        resultado += valorNodo;
+
+        if (!izquierdo.isEmpty()) {
+            resultado +="|" + izquierdo  ;
+        }
+        return resultado;
+    }
+
 
 }
