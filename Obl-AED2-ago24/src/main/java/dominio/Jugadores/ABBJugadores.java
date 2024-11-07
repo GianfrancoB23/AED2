@@ -4,16 +4,10 @@ import interfaz.Categoria;
 
 public class ABBJugadores<T extends Comparable<T>> {
     private Jugador raiz;
-    private ABBJugadores<Jugador> ABBPrincipiante;
-    private ABBJugadores<Jugador> ABBEstandar;
-    private ABBJugadores<Jugador> ABBProfesional;
     private Categoria categoria;
 
     public ABBJugadores() {
         this.raiz = null;
-        this.ABBPrincipiante = new ABBJugadores<>(Categoria.PRINCIPIANTE);
-        this.ABBEstandar = new ABBJugadores<>(Categoria.ESTANDARD);
-        this.ABBProfesional = new ABBJugadores<>(Categoria.PROFESIONAL);
     }
 
     // Constructor para los ABBCategorias
@@ -27,15 +21,6 @@ public class ABBJugadores<T extends Comparable<T>> {
     }
 
     public void insertar(Jugador nuevoJugador) {
-
-       /* // Insertar segun categoria
-        if (nuevoJugador.getCategoria() == Categoria.PRINCIPIANTE) {
-            ABBPrincipiante.insertarEnCategoria(nuevoJugador);
-        } else if (nuevoJugador.getCategoria() == Categoria.ESTANDARD) {
-            ABBEstandar.insertarEnCategoria(nuevoJugador);
-        } else if (nuevoJugador.getCategoria() == Categoria.PROFESIONAL) {
-            ABBProfesional.insertarEnCategoria(nuevoJugador);
-        }*/
         if (this.raiz == null) {
             this.raiz = nuevoJugador;
         } else {
@@ -60,30 +45,7 @@ public class ABBJugadores<T extends Comparable<T>> {
         }
     }
 
-    // Inserto segun cat
-    private void insertarEnCategoria(Jugador nuevoJugador) {
-        if (nuevoJugador.getCategoria() == this.categoria && this.categoria != null) {
-
-            if (this.raiz == null) {
-                this.raiz = nuevoJugador;
-            } else {
-                insertarRec(this.raiz, nuevoJugador);
-            }
-        }
-    }
-
     public ResultadoBusquedaJugador obtenerJugador(String alias) {
-        /*ResultadoBusquedaJugador ret = null;
-        if(obtenerJugadorRec(ABBPrincipiante.raiz, alias, 0) != null) {
-            ret = obtenerJugadorRec(ABBPrincipiante.raiz, alias, 0);
-        }
-        if(obtenerJugadorRec(ABBEstandar.raiz, alias, 0) != null) {
-            ret = obtenerJugadorRec(ABBEstandar.raiz, alias, 0);
-        }
-        if(obtenerJugadorRec(ABBProfesional.raiz, alias, 0) != null) {
-            ret = obtenerJugadorRec(ABBProfesional.raiz, alias, 0);
-        }
-        return ret;*/
         return obtenerJugadorRec(this.raiz, alias, 0);
     }
 
@@ -106,7 +68,6 @@ public class ABBJugadores<T extends Comparable<T>> {
     }
 
     public boolean existe(String alias) {
-        /*return obtenerJugador(alias) == null;*/
         return existeRec(this.raiz, alias);
     }
 
@@ -128,8 +89,8 @@ public class ABBJugadores<T extends Comparable<T>> {
 
     public String inOrden() {
         String ret = inOrden(this.raiz);
-        if(!ret.isEmpty()) {
-            return ret.substring(0, ret.length()-1);
+        if (!ret.isEmpty()) {
+            return ret.substring(0, ret.length() - 1);
         } else {
             return ret;
         }
@@ -141,7 +102,7 @@ public class ABBJugadores<T extends Comparable<T>> {
         if (nodo == null) {
             return ret;
         }
-        
+
         if (nodo != null) {
             ret += inOrden(nodo.getIzq());
             ret += nodo.getAlias() + ";" + nodo.getNombre() + ";" + nodo.getApellido() + ";" + nodo.getCategoria().toString() + "|";
@@ -150,6 +111,7 @@ public class ABBJugadores<T extends Comparable<T>> {
         return ret;
     }
 
+<<<<<<< Updated upstream
     public String listarJugadorEquipo(String nombreEquipo) {
         String ret = listarJugadorEquipo(this.raiz, nombreEquipo);
         if(!ret.isEmpty()) {
@@ -187,6 +149,8 @@ public class ABBJugadores<T extends Comparable<T>> {
         return "Esa categoria no existe.";
     }
 
+=======
+>>>>>>> Stashed changes
     private String buscarXCatRec(Jugador nodo) {
         String ret = "";
         if (nodo != null) {
