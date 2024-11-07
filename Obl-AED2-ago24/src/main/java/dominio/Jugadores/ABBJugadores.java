@@ -150,6 +150,30 @@ public class ABBJugadores<T extends Comparable<T>> {
         return ret;
     }
 
+    public String listarJugadorEquipo(String nombreEquipo) {
+        String ret = listarJugadorEquipo(this.raiz, nombreEquipo);
+        if(!ret.isEmpty()) {
+            return ret.substring(0, ret.length()-1);
+        } else {
+            return ret;
+        }
+    }
+
+    //Como esta insertado ABB por alias, ya esta ordenado
+    private String listarJugadorEquipo(Jugador nodo, String nombreEquipo) { // izq - nodo - der
+        String ret = "";
+        if (nodo == null) {
+            return ret;
+        }
+
+        if (nodo != null && nodo.getEquipo().getNombre() == nombreEquipo) {
+            ret += listarJugadorEquipo(nodo.getIzq(), nombreEquipo);
+            ret += nodo.getAlias() + ";" + nodo.getNombre() + ";" + nodo.getApellido() + ";" + nodo.getCategoria().toString() + "|";
+            ret += listarJugadorEquipo(nodo.getDer(), nombreEquipo);
+        }
+        return ret;
+    }
+
     public String buscarXCat(Categoria cat) {
         if (cat == ABBEstandar.getCategoria()) {
             return buscarXCatRec(ABBEstandar.raiz);

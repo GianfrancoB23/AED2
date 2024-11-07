@@ -151,7 +151,9 @@ public class ImplementacionSistema implements Sistema {
         jugador.setEquipo(abbEquipos.obtenerEquipo(nombreEquipo));
 
         // Agrego el jugador al equipo
-        equipo.jugadores.insertar(abbJugadores.obtenerJugador(aliasJugador).getJugador());
+        //Creamos un jugador con los datos del jugador existente para poder ingresarlo al abbJugadores dentro del equipo, porque si le pasamos directo el nodo ya tiene seteado getDer y getIzq
+        Jugador jugadorEquipo = new Jugador(jugador.getAlias(),jugador.getNombre(),jugador.getApellido(),jugador.getCategoria(), abbEquipos.obtenerEquipo(nombreEquipo));
+        equipo.jugadores.insertar(jugadorEquipo);
         equipo.sumarIntegrante();
 
         return Retorno.ok("El jugador " + jugador.getAlias() + " ha sido agregado al equipo " + equipo.getNombre() + " correctamente.");
