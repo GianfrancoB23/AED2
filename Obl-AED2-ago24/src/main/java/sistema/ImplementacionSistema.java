@@ -99,7 +99,15 @@ public class ImplementacionSistema implements Sistema {
 
     @Override
     public Retorno listarJugadoresPorCategoria(Categoria unaCategoria) {
-        return Retorno.ok(abbJugadores.buscarXCat(unaCategoria));
+        String jugadores = "";
+        if(unaCategoria==Categoria.PRINCIPIANTE){
+            jugadores = abbPrincipiantes.inOrden();
+        } else if (unaCategoria==Categoria.ESTANDARD) {
+            jugadores = abbEstandard.inOrden();
+        } else if (unaCategoria==Categoria.PROFESIONAL) {
+            jugadores = abbProfesionales.inOrden();
+        }
+        return Retorno.ok(jugadores);
     }
 
     @Override
